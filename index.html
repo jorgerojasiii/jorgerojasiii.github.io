@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jorge R. Rojas III — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ============================================================
+       TOKENS
+       ============================================================ */
+    :root{
+      --bg:            #0a0d0e;
+      --bg-panel:      #12181a;
+      --bg-panel-2:    #161e20;
+      --bg-inset:      #0e1214;
+      --border:        #223032;
+      --border-soft:   rgba(212,136,15,0.16);
+      --copper:        #d4880f;
+      --copper-bright: #f0a536;
+      --copper-dim:    rgba(212,136,15,0.35);
+      --led:           #3ddc84;
+      --led-glow:      rgba(61,220,132,0.55);
+      --text:          #e9ecec;
+      --text-muted:    #93a3a6;
+      --text-dim:      #5e6b6d;
+      --font-display:  'Space Grotesk', 'Inter', sans-serif;
+      --font-body:     'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono:     'JetBrains Mono', monospace;
+      --radius:        10px;
+      --trace-w:       1px;
+    }
+
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body{
+      font-family:var(--font-body);
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      position:relative;
+      overflow-x:hidden;
+    }
+    img{ max-width:100%; display:block; }
+    a{ color:var(--copper); text-decoration:none; transition:color .2s; }
+    a:hover{ color:var(--copper-bright); }
+    a:focus-visible, button:focus-visible{
+      outline:2px solid var(--copper-bright);
+      outline-offset:3px;
+      border-radius:2px;
+    }
+    .container{ max-width:1140px; margin:0 auto; padding:0 24px; position:relative; }
+
+    @media (prefers-reduced-motion: reduce){
+      *, *::before, *::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+    }
+
+    /* ============================================================
+       AMBIENT PCB BACKDROP — fixed, low-opacity grid + traces
+       ============================================================ */
+    .pcb-backdrop{
+      position:fixed; inset:0; z-index:0; pointer-events:none;
+      background-image:
+        linear-gradient(rgba(212,136,15,0.075) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212,136,15,0.075) 1px, transparent 1px),
+        linear-gradient(rgba(212,136,15,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212,136,15,0.03) 1px, transparent 1px);
+      background-size:42px 42px, 42px 42px, 210px 210px, 210px 210px;
+      animation:grid-drift 50s linear infinite;
+      -webkit-mask-image:radial-gradient(ellipse 120% 90% at 50% 15%, #000 35%, transparent 92%);
+              mask-image:radial-gradient(ellipse 120% 90% at 50% 15%, #000 35%, transparent 92%);
+    }
+    @keyframes grid-drift{ to{ background-position:42px 42px, 42px 42px, 210px 210px, 210px 210px; } }
+    .pcb-traces{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.5; }
+    .pcb-traces path{
+      fill:none; stroke:var(--copper); stroke-width:1; opacity:.16;
+    }
+    .pcb-traces .flow{
+      stroke:var(--copper-bright);
+      stroke-width:1.4;
+      opacity:.55;
+      stroke-dasharray:6 340;
+      animation:trace-flow 7s linear infinite;
+      filter:drop-shadow(0 0 3px var(--copper-dim));
+    }
+    .pcb-traces .flow.d2{ animation-duration:9s; animation-delay:-2s; }
+    .pcb-traces .flow.d3{ animation-duration:11s; animation-delay:-5s; }
+    @keyframes trace-flow{ to{ stroke-dashoffset:-700; } }
+
+    main, nav, footer, section{ position:relative; z-index:1; }
+
+    /* ============================================================
+       TYPOGRAPHY
+       ============================================================ */
+    h1,h2,h3,h4{ font-family:var(--font-display); font-weight:600; letter-spacing:-0.02em; line-height:1.15; }
+    h1{ font-size:clamp(1.7rem, 3.6vw, 2.9rem); font-weight:700; white-space:nowrap; letter-spacing:-0.03em; }
+    h2{ font-size:clamp(1.9rem, 5vw, 2.6rem); margin-bottom:.5rem; }
+    h3{ font-size:1.45rem; margin-bottom:.25rem; }
+    .section-label{
+      display:inline-flex; align-items:center; gap:8px;
+      font-family:var(--font-mono);
+      font-size:.72rem; text-transform:uppercase; letter-spacing:.14em;
+      color:var(--text-dim); margin-bottom:1.1rem; font-weight:500;
+    }
+    .section-label::before{
+      content:''; width:7px; height:7px; border-radius:50%;
+      background:var(--led); box-shadow:0 0 6px var(--led-glow);
+      animation:pulse-led 2.4s ease-in-out infinite;
+      flex-shrink:0;
+    }
+    .section-tag{
+      font-family:var(--font-mono); font-size:.68rem; color:var(--copper);
+      border:1px solid var(--border-soft); padding:2px 8px; border-radius:3px;
+      letter-spacing:.05em;
+    }
+    @keyframes pulse-led{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
+    .text-muted{ color:var(--text-muted); }
+    .text-accent{ color:var(--copper); }
+
+    /* ============================================================
+       NAVIGATION
+       ============================================================ */
+    nav{
+      position:fixed; top:0; left:0; width:100%; z-index:1000;
+      padding:14px 24px;
+      background:rgba(10,13,14,0.82);
+      backdrop-filter:blur(10px);
+      display:flex; justify-content:space-between; align-items:center;
+      border-bottom:1px solid var(--border);
+    }
+    nav .logo{
+      font-family:var(--font-mono); font-weight:600; font-size:1rem;
+      letter-spacing:-.01em; display:flex; align-items:center; gap:8px;
+    }
+    nav .logo .power-dot{
+      width:8px; height:8px; border-radius:50%; background:var(--led);
+      box-shadow:0 0 8px var(--led-glow);
+      animation:pulse-led 2.4s ease-in-out infinite;
+    }
+    nav .logo span{ color:var(--copper); }
+    nav ul{ display:flex; gap:1.9rem; list-style:none; font-size:.85rem; font-weight:500; }
+    nav ul a{
+      color:#c0c8c9; transition:color .2s; position:relative;
+      font-family:var(--font-mono); letter-spacing:.02em;
+    }
+    nav ul a::before{ content:'· '; color:var(--copper); opacity:0; transition:opacity .2s; }
+    nav ul a::after{
+      content:''; position:absolute; bottom:-5px; left:0; width:0; height:1px;
+      background:var(--copper-bright); transition:width .25s;
+      box-shadow:0 0 4px var(--copper-dim);
+    }
+    nav ul a:hover::after, nav ul a.active::after{ width:100%; }
+    nav ul a:hover, nav ul a.active{ color:#fff; }
+    nav ul a.active::before{ opacity:1; }
+    .menu-toggle{ display:none; background:none; border:none; color:var(--text); font-size:1.4rem; cursor:pointer; }
+
+    /* ============================================================
+       SECTIONS
+       ============================================================ */
+    section{ padding:88px 0; border-bottom:1px solid var(--border); }
+    section:last-of-type{ border-bottom:none; }
+    .reveal{ opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; }
+    .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+    /* staggered child reveal for grids */
+    .intersection-grid.reveal .intersection-item,
+    .achievement-grid.reveal .achievement-card,
+    .skills-grid.reveal .skills-group,
+    .project-grid.reveal .project-card{
+      opacity:0; transform:translateY(14px);
+      transition:opacity .5s ease, transform .5s ease;
+    }
+    .intersection-grid.reveal.in-view .intersection-item,
+    .achievement-grid.reveal.in-view .achievement-card,
+    .skills-grid.reveal.in-view .skills-group,
+    .project-grid.reveal.in-view .project-card{ opacity:1; transform:translateY(0); }
+    .intersection-grid .intersection-item:nth-child(1),
+    .achievement-grid .achievement-card:nth-child(1),
+    .skills-grid .skills-group:nth-child(1),
+    .project-grid .project-card:nth-child(1){ transition-delay:.05s; }
+    .intersection-grid .intersection-item:nth-child(2),
+    .achievement-grid .achievement-card:nth-child(2),
+    .skills-grid .skills-group:nth-child(2),
+    .project-grid .project-card:nth-child(2){ transition-delay:.15s; }
+    .intersection-grid .intersection-item:nth-child(3),
+    .achievement-grid .achievement-card:nth-child(3),
+    .skills-grid .skills-group:nth-child(3),
+    .project-grid .project-card:nth-child(3){ transition-delay:.25s; }
+    .intersection-grid .intersection-item:nth-child(4),
+    .achievement-grid .achievement-card:nth-child(4),
+    .skills-grid .skills-group:nth-child(4){ transition-delay:.35s; }
+
+    /* ---- Hero ---- */
+    #hero{
+      min-height:100vh; display:flex; align-items:center;
+      padding-top:80px; padding-bottom:40px; border-bottom:none;
+    }
+    #hero .container{ display:grid; grid-template-columns:1.05fr .95fr; gap:4rem; align-items:center; }
+    .hero-content .title-line{
+      font-family:var(--font-mono); font-size:1.02rem; font-weight:500;
+      color:var(--copper); margin-bottom:1rem; letter-spacing:.02em;
+    }
+    .hero-content .tagline{ font-size:1.08rem; color:#b3bcbd; max-width:480px; margin-bottom:2rem; }
+    .hero-actions{ display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap; }
+    .hero-cta{
+      display:inline-flex; align-items:center; height:44px; background:var(--copper);
+      color:#0a0d0e; font-weight:600; padding:0 26px; border-radius:5px; font-size:.92rem;
+      position:relative; overflow:hidden; transition:background .2s, transform .2s;
+    }
+    .hero-cta:hover{ background:var(--copper-bright); color:#0a0d0e; transform:translateY(-1px); }
+    .hero-cta::after{
+      content:''; position:absolute; inset:0; border-radius:5px;
+      box-shadow:0 0 0 0 var(--led-glow); transition:box-shadow .3s;
+    }
+    .hero-cta:hover::after{ box-shadow:0 0 22px 2px var(--copper-dim); }
+
+    /* staggered hero entrance */
+    .hero-content h1, .hero-content .title-line, .hero-content .tagline,
+    .hero-content .hero-actions, .hero-image{
+      opacity:0; transform:translateY(16px);
+      animation:hero-in .7s ease forwards;
+    }
+    .hero-content h1{ animation-delay:.05s; }
+    .hero-content .title-line{ animation-delay:.18s; }
+    .hero-content .tagline{ animation-delay:.3s; }
+    .hero-content .hero-actions{ animation-delay:.42s; }
+    .hero-image{ animation-delay:.25s; }
+    @keyframes hero-in{ to{ opacity:1; transform:translateY(0); } }
+
+    .hero-image{
+      border-radius:var(--radius); overflow:visible; background:var(--bg-panel);
+      aspect-ratio:1/1; position:relative; border:1px solid var(--border);
+      transition:transform .4s ease, box-shadow .4s ease; z-index:1;
+    }
+    .hero-image .frame{
+      position:absolute; inset:0; border-radius:var(--radius); overflow:hidden;
+      background:var(--bg-panel);
+    }
+    .hero-image:hover{
+      transform:scale(1.07); z-index:20;
+      box-shadow:0 26px 60px -16px rgba(0,0,0,.65), 0 0 0 1px var(--copper-dim), 0 0 30px -4px var(--copper-dim);
+    }
+    .hero-image img{ transition:transform .5s ease; }
+    .hero-image::before{
+      content:''; position:absolute; inset:0; z-index:2; pointer-events:none;
+      border-radius:var(--radius);
+      box-shadow:inset 0 0 0 1px rgba(212,136,15,0.18);
+    }
+    .hero-image img{ width:100%; height:100%; object-fit:cover; }
+    .hero-image .corner{ position:absolute; width:16px; height:16px; z-index:3; }
+    .hero-image .corner::before, .hero-image .corner::after{ content:''; position:absolute; background:var(--copper); }
+    .hero-image .corner.tl{ top:10px; left:10px; }
+    .hero-image .corner.tr{ top:10px; right:10px; }
+    .hero-image .corner.bl{ bottom:10px; left:10px; }
+    .hero-image .corner.br{ bottom:10px; right:10px; }
+    .hero-image .corner::before{ width:14px; height:2px; }
+    .hero-image .corner::after{ width:2px; height:14px; }
+    .hero-image .corner.tr::before, .hero-image .corner.tr::after{ right:0; }
+    .hero-image .corner.bl::before, .hero-image .corner.bl::after{ bottom:0; }
+    .hero-image .corner.br::before, .hero-image .corner.br::after{ bottom:0; right:0; }
+
+    .domain-indicator{
+      font-family:var(--font-mono); font-size:.88rem; color:var(--copper);
+      border:1px solid var(--border); border-left:2px solid var(--copper);
+      height:44px; padding:0 16px; border-radius:4px; background:var(--bg-inset);
+      display:inline-flex; align-items:center; gap:10px;
+      box-shadow:0 0 0 0 transparent; transition:box-shadow .3s;
+    }
+    .domain-indicator:hover{ box-shadow:0 0 16px -4px var(--copper-dim); }
+    .domain-indicator .label{ color:var(--text-dim); }
+    .domain-indicator .cursor{
+      display:inline-block; width:8px; height:1.1em; background:var(--copper);
+      margin-left:2px; animation:blink 1s step-end infinite;
+    }
+    @keyframes blink{ 0%,100%{ opacity:1; } 50%{ opacity:0; } }
+    .scope{ width:60px; height:20px; flex-shrink:0; }
+    .scope path{
+      fill:none; stroke:var(--led); stroke-width:1.5;
+      stroke-dasharray:110; animation:scope-sweep 2.6s linear infinite;
+      filter:drop-shadow(0 0 3px var(--led-glow));
+    }
+    @keyframes scope-sweep{ to{ stroke-dashoffset:-220; } }
+
+    /* ============================================================
+       SPINE — vertical circuit trace running the length of the page,
+       with glowing nodes that light up per active section (signature element)
+       ============================================================ */
+    .spine{
+      position:absolute; left:0; top:0; bottom:0; width:1px;
+      background:linear-gradient(to bottom, transparent, var(--border) 4%, var(--border) 96%, transparent);
+      display:none;
+    }
+    .spine-node{
+      position:absolute; left:-4px; width:9px; height:9px; border-radius:50%;
+      background:var(--bg-panel); border:1px solid var(--border);
+      transition:background .4s, border-color .4s, box-shadow .4s;
+    }
+    .spine-node.active{
+      background:var(--led); border-color:var(--led);
+      box-shadow:0 0 10px var(--led-glow);
+    }
+    @media (min-width:1240px){
+      .spine{ display:block; left:calc(50% - 610px); }
+    }
+
+    /* ---- Intersection ---- */
+    #intersection{ background:var(--bg-panel); }
+    .intersection-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1.6rem; margin-top:2rem; }
+    .intersection-item{
+      background:var(--bg-inset); padding:1.5rem; border-radius:8px;
+      border:1px solid var(--border); border-left:3px solid var(--copper);
+      position:relative; transition:transform .25s, border-color .25s, box-shadow .25s;
+    }
+    .intersection-item:hover{
+      transform:translateY(-3px); border-color:var(--copper-dim);
+      box-shadow:0 8px 24px -12px rgba(212,136,15,0.35);
+    }
+    .intersection-item h4{ font-size:1.05rem; margin-bottom:.3rem; font-family:var(--font-display); }
+    .intersection-item p{ font-size:.88rem; color:var(--text-muted); }
+
+    /* ---- Projects ---- */
+    .project-featured{
+      display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; margin:2rem 0 3rem;
+      background:var(--bg-panel); padding:2rem; border-radius:var(--radius);
+      border:1px solid var(--border-soft); position:relative;
+    }
+    .project-featured::before{
+      content:'FEATURED'; position:absolute; top:-1px; right:20px;
+      background:var(--copper); color:#0a0d0e; font-family:var(--font-mono);
+      font-size:.62rem; font-weight:700; letter-spacing:.1em;
+      padding:3px 10px; border-radius:0 0 4px 4px;
+    }
+    .project-featured .project-details h3{ font-size:1.9rem; }
+    .project-featured .project-details .tech-tags{ display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0; }
+    .tech-tags span{
+      background:var(--bg-inset); color:#c4cbcc; padding:4px 11px;
+      border-radius:4px; font-size:.72rem; font-weight:500; letter-spacing:.03em;
+      border:1px solid var(--border); font-family:var(--font-mono);
+      position:relative;
+    }
+    .project-featured .project-image{
+      border-radius:8px; overflow:hidden; background:var(--bg-inset); aspect-ratio:16/10;
+      border:1px solid var(--border);
+    }
+    .project-featured .project-image img{ width:100%; height:100%; object-fit:cover; }
+
+    /* THERAPOD mosaic — portrait device shot + two landscape news captures */
+    .therapod-mosaic{
+      display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr;
+      gap:8px; border-radius:8px;
+    }
+    .therapod-mosaic .m-portrait{ grid-row:1 / 3; aspect-ratio:auto; height:100%; }
+    .therapod-mosaic figure{
+      margin:0; position:relative; overflow:hidden; background:var(--bg-inset);
+      border:1px solid var(--border); border-radius:6px;
+    }
+    .therapod-mosaic .m-portrait{ aspect-ratio:3/4; }
+    .therapod-mosaic .m-land{ aspect-ratio:16/9.5; }
+    .therapod-mosaic figure img{ width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
+    .therapod-mosaic figure:hover{ transform:scale(1.12); z-index:20; box-shadow:0 22px 45px -14px rgba(0,0,0,.6), 0 0 0 1px var(--copper-dim); }
+    .therapod-mosaic figure{ transition:transform .35s ease, box-shadow .35s ease; }
+    .therapod-mosaic figure:hover img{ transform:scale(1.06); }
+    .therapod-mosaic figcaption{
+      position:absolute; left:0; right:0; bottom:0; padding:6px 10px;
+      font-family:var(--font-mono); font-size:.62rem; letter-spacing:.03em;
+      color:var(--text); background:linear-gradient(to top, rgba(0,0,0,.75), transparent);
+      opacity:0; transition:opacity .3s;
+    }
+    .therapod-mosaic figure:hover figcaption{ opacity:1; }
+
+    .project-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.8rem; margin-top:2rem; }
+    .project-card{
+      background:var(--bg-panel); border-radius:8px; overflow:hidden;
+      border:1px solid var(--border); transition:border-color .25s, transform .25s, box-shadow .25s;
+    }
+    .project-card:hover{
+      border-color:var(--copper-dim); transform:translateY(-3px);
+      box-shadow:0 10px 28px -14px rgba(212,136,15,0.4);
+    }
+    .project-card .card-image{
+      aspect-ratio:16/9; background:var(--bg-inset); overflow:hidden;
+      display:flex; align-items:center; justify-content:center; color:var(--text-dim); font-size:.85rem;
+      position:relative; z-index:1;
+    }
+    .project-card .card-image img{ width:100%; height:100%; object-fit:cover; transition:transform .5s ease, box-shadow .5s ease; }
+    .project-card .card-image:hover{ z-index:20; }
+    .project-card .card-image:hover img{
+      transform:scale(1.22);
+      box-shadow:0 20px 45px -12px rgba(0,0,0,.6), 0 0 0 1px var(--copper-dim);
+    }
+    .project-card .card-body{ padding:1.25rem; }
+    .project-card .card-body h4{ font-size:1.05rem; margin-bottom:.3rem; font-family:var(--font-display); }
+    .project-card .card-body p{ font-size:.88rem; color:var(--text-muted); margin-bottom:.75rem; }
+
+    /* ---- Experience ---- */
+    .experience-list{ display:flex; flex-direction:column; gap:0; margin-top:1.5rem; position:relative; }
+    .experience-item{
+      border-left:1px solid var(--border); padding:0 0 2rem 1.6rem; position:relative;
+    }
+    .experience-item:last-child{ padding-bottom:0; }
+    .experience-item::before{
+      content:''; position:absolute; left:-5px; top:4px; width:9px; height:9px;
+      border-radius:50%; background:var(--bg); border:2px solid var(--copper);
+    }
+    .experience-item .meta{
+      font-size:.82rem; color:var(--text-dim); margin-bottom:.25rem;
+      font-family:var(--font-mono); letter-spacing:.02em;
+    }
+    .experience-item h4{ font-size:1.15rem; font-family:var(--font-display); }
+    .experience-item p{ color:#c4cbcc; font-size:.94rem; margin-top:.3rem; }
+
+    /* ---- Achievements ---- */
+    .achievement-highlight{
+      display:grid; grid-template-columns:1fr 1fr; gap:2rem; background:var(--bg-panel);
+      border-radius:var(--radius); padding:2rem; border:1px solid var(--border-soft); margin:1.5rem 0;
+    }
+    .achievement-highlight .ach-gallery{
+      display:grid; grid-template-columns:1fr 1fr; gap:8px;
+    }
+    .achievement-highlight .ach-gallery figure{
+      margin:0; position:relative; overflow:hidden; border-radius:8px;
+      background:var(--bg-inset); border:1px solid var(--border); aspect-ratio:4/5;
+      transition:transform .35s ease, box-shadow .35s ease;
+    }
+    .achievement-highlight .ach-gallery figure:hover{
+      transform:scale(1.12); z-index:20;
+      box-shadow:0 22px 45px -14px rgba(0,0,0,.6), 0 0 0 1px var(--copper-dim);
+    }
+    .achievement-highlight .ach-gallery img{
+      width:100%; height:100%; object-fit:cover; transition:transform .5s ease;
+    }
+    .achievement-highlight .ach-gallery figure:hover img{ transform:scale(1.06); }
+    .achievement-highlight .ach-gallery figcaption{
+      position:absolute; left:0; right:0; bottom:0; padding:6px 10px;
+      font-family:var(--font-mono); font-size:.6rem; letter-spacing:.03em;
+      color:var(--text); background:linear-gradient(to top, rgba(0,0,0,.75), transparent);
+      opacity:0; transition:opacity .3s;
+    }
+    .achievement-highlight .ach-gallery figure:hover figcaption{ opacity:1; }
+    .achievement-highlight .ach-detail h3{ font-size:1.7rem; color:var(--copper); }
+    .achievement-highlight .ach-detail .sub{ color:var(--text-dim); font-family:var(--font-mono); font-size:.85rem; }
+
+    .achievement-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:1.3rem; margin-top:2rem; }
+    .achievement-card{
+      background:var(--bg-inset); padding:1rem 1.25rem; border-radius:7px;
+      border:1px solid var(--border); transition:border-color .2s, transform .2s;
+    }
+    .achievement-card:hover{ border-color:var(--copper-dim); transform:translateY(-2px); }
+    .achievement-card h4{ font-size:.98rem; font-family:var(--font-display); }
+    .achievement-card p{ font-size:.83rem; color:var(--text-muted); }
+
+    /* ---- Skills ---- */
+    .skills-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:2rem; margin-top:1.5rem; }
+    .skills-group h4{
+      font-size:.92rem; color:var(--copper); margin-bottom:.6rem; padding-bottom:.4rem;
+      border-bottom:1px dashed var(--border); font-family:var(--font-mono); letter-spacing:.05em; text-transform:uppercase;
+    }
+    .skills-group ul{ list-style:none; font-size:.92rem; color:#c4cbcc; }
+    .skills-group ul li{ padding:.22rem 0; display:flex; align-items:center; gap:8px; }
+    .skills-group ul li::before{
+      content:''; width:5px; height:5px; background:var(--copper); border-radius:1px; flex-shrink:0;
+    }
+
+    /* ---- About ---- */
+    #about{ background:var(--bg-panel); }
+    .about-content{ display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
+    .about-content .about-text p{ margin-bottom:1rem; color:#c4cbcc; }
+    .about-content .about-image{
+      border-radius:var(--radius); overflow:hidden; background:var(--bg-inset); aspect-ratio:1/1;
+      border:1px solid var(--border); transition:transform .4s ease, box-shadow .4s ease; position:relative;
+    }
+    .about-content .about-image:hover{
+      transform:scale(1.1); z-index:20;
+      box-shadow:0 26px 55px -16px rgba(0,0,0,.65), 0 0 0 1px var(--copper-dim);
+    }
+    .about-content .about-image img{ width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
+    .about-content .about-image:hover img{ transform:scale(1.05); }
+
+    /* ---- Contact ---- */
+    #contact{ background:var(--bg-inset); text-align:center; padding:64px 0; }
+    #contact h2{ margin-bottom:.5rem; }
+    #contact p{ color:var(--text-muted); margin-bottom:2rem; }
+    .contact-links{ display:flex; justify-content:center; gap:2.2rem; flex-wrap:wrap; font-size:1.05rem; font-family:var(--font-mono); }
+    .contact-links a{ color:var(--text); border-bottom:1px solid transparent; transition:border-color .2s, color .2s; padding-bottom:2px; }
+    .contact-links a:hover{ border-color:var(--copper); color:#fff; }
+    footer{ margin-top:2.4rem; font-size:.78rem; color:var(--text-dim); font-family:var(--font-mono); }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width:768px){
+      nav ul{
+        display:none; flex-direction:column; background:var(--bg); position:absolute;
+        top:60px; left:0; width:100%; padding:1.5rem; gap:1rem; border-bottom:1px solid var(--border);
+      }
+      nav ul.open{ display:flex; }
+      .menu-toggle{ display:block; }
+      #hero .container{ grid-template-columns:1fr; text-align:center; gap:2rem; }
+      .hero-content .tagline{ margin-left:auto; margin-right:auto; }
+      .hero-actions{ justify-content:center; }
+      .intersection-grid{ grid-template-columns:1fr 1fr; }
+      .project-featured{ grid-template-columns:1fr; }
+      .achievement-highlight{ grid-template-columns:1fr; }
+      .about-content{ grid-template-columns:1fr; }
+      .about-content .about-image{ order:-1; max-width:300px; margin:0 auto; }
+      .experience-item{ padding-left:1.2rem; }
+    }
+    @media (max-width:480px){
+      .intersection-grid{ grid-template-columns:1fr; }
+      .project-grid{ grid-template-columns:1fr; }
+      .skills-grid{ grid-template-columns:1fr 1fr; }
+      .achievement-grid{ grid-template-columns:1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient PCB backdrop -->
+  <div class="pcb-backdrop" aria-hidden="true"></div>
+  <svg class="pcb-traces" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M -50 120 H 260 V 40 H 900" />
+    <path class="flow" d="M -50 120 H 260 V 40 H 900" />
+    <path d="M 1400 300 H 1040 V 460 H 200 V 620" />
+    <path class="flow d2" d="M 1400 300 H 1040 V 460 H 200 V 620" />
+    <path d="M -60 900 H 500 V 760 H 1400" />
+    <path class="flow d3" d="M -60 900 H 500 V 760 H 1400" />
+  </svg>
+
+  <!-- Signature vertical trace spine (desktop only) -->
+  <div class="spine" id="spine" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo"><span class="power-dot"></span>Jorge<span>.</span></div>
+    <button class="menu-toggle" aria-label="Menu">☰</button>
+    <ul id="nav-list">
+      <li><a href="#hero" class="active">Home</a></li>
+      <li><a href="#intersection">Intersection</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#achievements">Achievements</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Jorge R. Rojas III</h1>
+        <div class="title-line">Electronics Engineer · Hardware · Software · AI</div>
+        <p class="tagline">
+          Building at the intersection of electronics, embedded systems, software, and AI.
+        </p>
+        <div class="hero-actions">
+          <a href="#projects" class="hero-cta">See my work</a>
+          <div class="domain-indicator">
+            <svg class="scope" viewBox="0 0 60 20" aria-hidden="true">
+              <path d="M0 10 H14 L20 2 L26 18 L32 2 L38 18 L44 10 H60" />
+            </svg>
+            <span class="label">Currently in:</span>
+            <span id="domain-text">Hardware</span><span class="cursor"></span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-image">
+        <span class="corner tl"></span><span class="corner tr"></span>
+        <span class="corner bl"></span><span class="corner br"></span>
+        <div class="frame">
+          <img src="img/graduation.png" alt="Jorge R. Rojas III" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intersection -->
+  <section id="intersection">
+    <div class="container reveal">
+      <div class="section-label">The Bridge <span class="section-tag">4 DOMAINS</span></div>
+      <h2>Hardware + Software + AI</h2>
+      <p class="text-muted" style="max-width:600px; margin-bottom:1rem;">
+        I don't work in one domain — I connect them. Here's where I operate.
+      </p>
+      <div class="intersection-grid reveal">
+        <div class="intersection-item">
+          <h4>Electronics Engineering</h4>
+          <p>Circuit design, signal processing, PCB layout, and system-level thinking.</p>
+        </div>
+        <div class="intersection-item">
+          <h4>Embedded Systems</h4>
+          <p>ESP32, Raspberry Pi, Arduino — sensors, actuators, and real-time control.</p>
+        </div>
+        <div class="intersection-item">
+          <h4>Software Development</h4>
+          <p>Python, Django/Flask, REST APIs, web apps, and automation.</p>
+        </div>
+        <div class="intersection-item">
+          <h4>AI &amp; Evaluation</h4>
+          <p>LLM agents, prompt engineering, model evaluation, and AI-powered solutions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-label reveal">What I've Built <span class="section-tag">U-01</span></div>
+      <h2 class="reveal">Featured Project</h2>
+
+      <!-- THERAPOD - featured -->
+      <div class="project-featured reveal">
+        <div class="project-details">
+          <h3>THERAPOD</h3>
+          <p style="color:#c4cbcc; margin-bottom:0.5rem;">
+            Multi-turn LLM agent for conversational therapy and emotion recognition.
+          </p>
+          <div class="tech-tags">
+            <span>Django</span><span>LLM</span><span>REST APIs</span><span>Embedded</span><span>AI</span>
+          </div>
+          <p style="font-size:0.95rem; color:var(--text-muted);">
+            Featured in GMA 7's 24 Oras: Game Changer. Developed secure Django web app for session logging, AI summaries, and real-time tracking. Led code review across modules.
+          </p>
+        </div>
+        <div class="therapod-mosaic">
+          <figure class="m-portrait">
+            <img src="img/therapod.png" alt="THERAPOD device portrait shot" />
+            <figcaption>THERAPOD — device</figcaption>
+          </figure>
+          <figure class="m-land">
+            <img src="img/team_therapod.png" alt="THERAPOD team, group photo from GMA 7 24 Oras news feature" />
+            <figcaption>24 Oras — team feature</figcaption>
+          </figure>
+          <figure class="m-land">
+            <img src="img/closeup.png" alt="Close-up side profile of Jorge, screen-captured from the GMA 7 24 Oras news segment" />
+            <figcaption>24 Oras — segment still</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <h3 class="reveal" style="margin-top:2rem;">Other Projects</h3>
+      <div class="project-grid reveal">
+        <div class="project-card">
+          <div class="card-image">
+            <img src="img/iacademy.jpg" alt="Music Box presentation at iAcademy" />
+          </div>
+          <div class="card-body">
+            <h4>Arduino Music Box</h4>
+            <p>Logic design and implementation of a programmable music box. Presented at Arduino Day 2024 (iAcademy Makati).</p>
+            <div class="tech-tags" style="margin-top:0.5rem;">
+              <span>Arduino</span><span>C++</span><span>Embedded</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="card-image">
+            <img src="img/packethacks-team.webp" alt="packetHACKS 2024 team" />
+          </div>
+          <div class="card-body">
+            <h4>packetHACKS 2024</h4>
+            <p>IoT Hackathon finalist. Built an innovative IoT solution with real-time data processing and embedded integration.</p>
+            <div class="tech-tags" style="margin-top:0.5rem;">
+              <span>IoT</span><span>ESP32</span><span>Embedded</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="card-image" style="color:var(--text-dim); font-size:0.85rem; text-align:center; padding:1rem;">
+            <span>No image available</span>
+          </div>
+          <div class="card-body">
+            <h4>IoT Attendance System</h4>
+            <p>Fingerprint biometrics and web platform for timestamped employee logging. Built during internship at Erovoutika Robotics.</p>
+            <div class="tech-tags" style="margin-top:0.5rem;">
+              <span>ESP32</span><span>Fingerprint</span><span>Web</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience">
+    <div class="container reveal">
+      <div class="section-label">Professional Path <span class="section-tag">U-02</span></div>
+      <h2>Experience</h2>
+      <div class="experience-list">
+        <div class="experience-item">
+          <div class="meta">May 2026 – Present · Shenzhen Farben Information Technology</div>
+          <h4>AI Trainer Consultant</h4>
+          <p>AI model evaluation, prompt engineering, and training data refinement. Working at the intersection of AI and real-world applications.</p>
+        </div>
+        <div class="experience-item">
+          <div class="meta">2024 · Erovoutika Robotics &amp; Automation</div>
+          <h4>Software Engineering Intern</h4>
+          <p>Developed IoT attendance system using fingerprint biometrics. Built web platform for timestamped employee logging with embedded-to-server integration.</p>
+        </div>
+        <div class="experience-item">
+          <div class="meta">2021 – 2022 · Atmos Cloud Solutions Inc.</div>
+          <h4>Software Engineer Trainee</h4>
+          <p>Contributed to full-stack Python web applications; learned Django/Flask stack.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Achievements -->
+  <section id="achievements">
+    <div class="container reveal">
+      <div class="section-label">Recognition <span class="section-tag">U-03</span></div>
+      <h2>Key Achievements</h2>
+
+      <div class="achievement-highlight">
+        <div class="ach-gallery">
+          <figure>
+            <img src="img/team_podium.webp" alt="Programming team and coach on stage receiving the IECEP National Programming Competition award" />
+            <figcaption>On stage</figcaption>
+          </figure>
+          <figure>
+            <img src="img/team_outside.webp" alt="Programming team and coach outside Bahay ng Alumni, UP Diliman" />
+            <figcaption>Bahay ng Alumni, UP Diliman</figcaption>
+          </figure>
+        </div>
+        <div class="ach-detail">
+          <h3>National Programming Champion</h3>
+          <div class="sub">IECEP · 2023 &amp; 2024</div>
+          <p style="color:#c4cbcc; margin-top:0.75rem;">
+            Back-to-back champion of the IECEP National Programming Competition. Demonstrated competitive programming and algorithmic problem-solving at the highest level.
+          </p>
+          <div style="margin-top:1rem; display:flex; gap:1rem; flex-wrap:wrap;">
+            <span style="background:var(--bg-inset); padding:4px 12px; border-radius:20px; font-size:0.78rem; border:1px solid var(--border); font-family:var(--font-mono); color:var(--text-muted);">Team photo at Bahay ng Alumni, UP Diliman</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="achievement-grid reveal">
+        <div class="achievement-card">
+          <h4>IT Passport Certification</h4>
+          <p>PhilNITS, 2024.</p>
+        </div>
+        <div class="achievement-card">
+          <h4>packetHACKS 2024 Finalist</h4>
+          <p>IoT Hackathon finalist.</p>
+        </div>
+        <div class="achievement-card">
+          <h4>Algolympics 2022 Finalist</h4>
+          <p>Competitive programming finalist.</p>
+        </div>
+        <div class="achievement-card">
+          <h4>Code Up TUP-ECE Champion</h4>
+          <p>Programming contest champion, 2021.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Areas (Skills) -->
+  <section id="skills">
+    <div class="container reveal">
+      <div class="section-label">Technical Toolkit <span class="section-tag">U-04</span></div>
+      <h2>Areas of Expertise</h2>
+      <div class="skills-grid reveal">
+        <div class="skills-group">
+          <h4>Programming</h4>
+          <ul><li>Python</li><li>Arduino C++</li><li>JavaScript (basic)</li></ul>
+        </div>
+        <div class="skills-group">
+          <h4>Embedded Systems</h4>
+          <ul><li>ESP32</li><li>Raspberry Pi</li><li>Arduino (Uno, Nano, Mega)</li></ul>
+        </div>
+        <div class="skills-group">
+          <h4>Frameworks &amp; Tools</h4>
+          <ul><li>Django / Flask</li><li>Git</li><li>Linux CLI</li></ul>
+        </div>
+        <div class="skills-group">
+          <h4>Hardware &amp; Integration</h4>
+          <ul><li>Sensors &amp; actuators</li><li>Fingerprint modules</li><li>RESTful APIs</li><li>Web-IoT integration</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container reveal">
+      <div class="section-label">About Me <span class="section-tag">U-05</span></div>
+      <div class="about-content">
+        <div class="about-text">
+          <h2>Electronics Engineer with a builder's mindset</h2>
+          <p>
+            I'm Jorge R. Rojas III, a licensed Electronics Engineer from the Technological University of the Philippines - Manila.
+            My work bridges hardware, software, and AI — from designing embedded systems to building full-stack web applications and evaluating LLM models.
+          </p>
+          <p>
+            I thrive at the intersection of disciplines. Whether it's developing a medical AI agent (THERAPOD), automating an IoT attendance system, or speaking at Arduino Day about music box logic, I enjoy solving problems that require both depth and breadth.
+          </p>
+          <p>
+            Outside of engineering, I mentor, speak at tech events, and lead technical communities as former CTO of Google Developer Student Clubs - TUP Manila.
+          </p>
+        </div>
+        <div class="about-image">
+          <img src="img/san-roque.webp" alt="Jorge at San Roque Hydroelectric Power Plant" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container reveal">
+      <h2>Let's Connect</h2>
+      <p>I'm always open to discussing engineering, AI, and interesting projects.</p>
+      <div class="contact-links">
+        <a href="mailto:jorgereluniarojasiii@gmail.com">Email</a>
+        <a href="tel:+639763649681">Phone</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">GitHub</a>
+      </div>
+      <footer>&copy; 2026 Jorge R. Rojas III. Built with purpose.</footer>
+    </div>
+  </section>
+
+  <script>
+    // ----- Mobile menu toggle -----
+    const toggle = document.querySelector('.menu-toggle');
+    const navList = document.getElementById('nav-list');
+    toggle.addEventListener('click', () => navList.classList.toggle('open'));
+    navList.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navList.classList.remove('open'));
+    });
+
+    // ----- Active nav link on scroll -----
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('nav ul a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        if (window.scrollY >= section.offsetTop - 120) current = section.getAttribute('id');
+      });
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    }, { passive: true });
+
+    // ----- Hero domain indicator cycle -----
+    const domains = ['Hardware', 'Embedded', 'Software', 'AI'];
+    let di = 0;
+    const domainEl = document.getElementById('domain-text');
+    setInterval(() => {
+      di = (di + 1) % domains.length;
+      domainEl.textContent = domains[di];
+    }, 2500);
+
+    // ----- Build spine nodes aligned to sections -----
+    const spine = document.getElementById('spine');
+    if (spine) {
+      const nodes = [];
+      sections.forEach(sec => {
+        const node = document.createElement('div');
+        node.className = 'spine-node';
+        node.style.top = (sec.offsetTop + 40) + 'px';
+        spine.appendChild(node);
+        nodes.push({ el: node, top: sec.offsetTop });
+      });
+      spine.style.height = document.body.scrollHeight + 'px';
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY + 160;
+        nodes.forEach((n, i) => {
+          const next = nodes[i + 1] ? nodes[i + 1].top : Infinity;
+          n.el.classList.toggle('active', y >= n.top && y < next);
+        });
+      }, { passive: true });
+    }
+
+    // ----- Scroll reveal -----
+    const revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      revealEls.forEach(el => io.observe(el));
+    } else {
+      revealEls.forEach(el => el.classList.add('in-view'));
+    }
+  </script>
+
+</body>
+</html>
