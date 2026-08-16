@@ -97,6 +97,50 @@
                 transition-duration: 0.001ms !important;
                 scroll-behavior: auto !important;
             }
+            .hero-ring {
+                opacity: 0.5 !important;
+            }
+            .hero-ring .dot {
+                opacity: 0.6 !important;
+                animation: none !important;
+            }
+            .hero-image-circular::after {
+                animation: none !important;
+            }
+            .hero-image-circular .scanline {
+                animation: none !important;
+                opacity: 0.15 !important;
+            }
+            .pcb-backdrop {
+                animation: none !important;
+            }
+            .pcb-traces .flow {
+                animation: none !important;
+                stroke-dashoffset: 0 !important;
+            }
+            .section-label::before {
+                animation: none !important;
+            }
+            .ambient-glow {
+                display: none !important;
+            }
+            .project-card {
+                animation: none !important;
+                transform: none !important;
+            }
+            .project-card .card-shimmer {
+                animation: none !important;
+                opacity: 0 !important;
+            }
+            .project-card .card-dots {
+                animation: none !important;
+            }
+            .project-card .border-glow {
+                animation: none !important;
+            }
+            .project-card .float-anim {
+                animation: none !important;
+            }
         }
 
         /* ============================================================
@@ -108,10 +152,10 @@
             z-index: 0;
             pointer-events: none;
             background-image:
-                linear-gradient(rgba(212, 136, 15, 0.06) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(212, 136, 15, 0.06) 1px, transparent 1px),
-                linear-gradient(rgba(212, 136, 15, 0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(212, 136, 15, 0.025) 1px, transparent 1px);
+                linear-gradient(rgba(212, 136, 15, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 136, 15, 0.15) 1px, transparent 1px),
+                linear-gradient(rgba(212, 136, 15, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 136, 15, 0.08) 1px, transparent 1px);
             background-size: 48px 48px, 48px 48px, 240px 240px, 240px 240px;
             animation: grid-drift 60s linear infinite;
             -webkit-mask-image: radial-gradient(ellipse 130% 100% at 50% 10%, #000 30%, transparent 90%);
@@ -374,7 +418,6 @@
             border-bottom: none;
         }
 
-        /* ---- Reveal animations ---- */
         .reveal {
             opacity: 0;
             transform: translateY(30px) scale(0.98);
@@ -597,26 +640,29 @@
             left: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none;
+            will-change: transform;
         }
         .hero-ring.r1 {
-            width: calc(100% + 80px);
-            height: calc(100% + 80px);
-            max-width: 440px;
-            max-height: 440px;
-            border: 2px dashed rgba(212, 136, 15, 0.5);
+            width: calc(100% + 100px);
+            height: calc(100% + 100px);
+            max-width: 480px;
+            max-height: 480px;
+            border: 2.5px dashed rgba(212, 136, 15, 0.6);
             animation: ring-spin 20s linear infinite;
-            box-shadow: 0 0 40px rgba(212, 136, 15, 0.05), inset 0 0 40px rgba(212, 136, 15, 0.02);
+            box-shadow: 0 0 50px rgba(212, 136, 15, 0.08), inset 0 0 50px rgba(212, 136, 15, 0.03);
+            opacity: 0.9;
         }
         .hero-ring.r2 {
-            width: calc(100% + 140px);
-            height: calc(100% + 140px);
-            max-width: 500px;
-            max-height: 500px;
-            border: 1.5px solid var(--copper-bright);
+            width: calc(100% + 160px);
+            height: calc(100% + 160px);
+            max-width: 540px;
+            max-height: 540px;
+            border: 2px solid var(--copper-bright);
             border-right-color: transparent;
             border-bottom-color: rgba(212, 136, 15, 0.15);
             animation: ring-spin 10s linear infinite reverse;
-            box-shadow: 0 0 80px rgba(212, 136, 15, 0.08), inset 0 0 80px rgba(212, 136, 15, 0.04);
+            box-shadow: 0 0 90px rgba(212, 136, 15, 0.1), inset 0 0 90px rgba(212, 136, 15, 0.05);
+            opacity: 0.95;
         }
         @keyframes ring-spin {
             to {
@@ -626,35 +672,36 @@
 
         .hero-ring .dot {
             position: absolute;
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             background: var(--copper-bright);
             border-radius: 50%;
-            top: -6px;
+            top: -7px;
             left: 50%;
             transform: translateX(-50%);
-            box-shadow: 0 0 30px var(--copper-bright), 0 0 80px rgba(212, 136, 15, 0.4);
+            box-shadow: 0 0 35px var(--copper-bright), 0 0 80px rgba(212, 136, 15, 0.5);
             animation: pulse-dot 1.5s ease-in-out infinite alternate;
+            will-change: transform, opacity;
         }
         .hero-ring .dot.d2 {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             background: var(--led);
-            box-shadow: 0 0 30px var(--led-glow), 0 0 60px rgba(61, 220, 132, 0.2);
+            box-shadow: 0 0 35px var(--led-glow), 0 0 70px rgba(61, 220, 132, 0.25);
             top: auto;
-            bottom: -4px;
+            bottom: -5px;
             left: 30%;
             animation-duration: 1s;
             animation-delay: 0.5s;
         }
         @keyframes pulse-dot {
             0% {
-                opacity: 0.3;
-                transform: translateX(-50%) scale(0.7);
+                opacity: 0.25;
+                transform: translateX(-50%) scale(0.6);
             }
             100% {
                 opacity: 1;
-                transform: translateX(-50%) scale(1.3);
+                transform: translateX(-50%) scale(1.4);
             }
         }
 
@@ -675,9 +722,9 @@
         .hero-image-circular::after {
             content: '';
             position: absolute;
-            inset: -6px;
+            inset: -8px;
             border-radius: 50%;
-            padding: 4px;
+            padding: 5px;
             background: conic-gradient(from 0deg, var(--copper), var(--led), var(--copper-bright), var(--copper), var(--led), var(--copper));
             -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
             -webkit-mask-composite: xor;
@@ -685,7 +732,8 @@
             pointer-events: none;
             animation: spin-border 4s linear infinite;
             z-index: 2;
-            opacity: 0.8;
+            opacity: 0.9;
+            will-change: transform;
         }
         @keyframes spin-border {
             to {
@@ -741,7 +789,6 @@
             }
         }
 
-        /* Hero content animation */
         .hero-content h1,
         .hero-content .title-line,
         .hero-content .tagline,
@@ -984,6 +1031,9 @@
             margin-top: 2rem;
         }
 
+        /* ============================================================
+           ENHANCED PROJECT CARD ANIMATIONS
+           ============================================================ */
         .project-card {
             background: var(--bg-panel);
             border-radius: 10px;
@@ -995,7 +1045,204 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             display: flex;
             flex-direction: column;
+            /* floating animation base */
+            animation: float-card 6s ease-in-out infinite;
+            animation-play-state: running;
         }
+        /* staggered float delays */
+        .project-card:nth-child(1) {
+            animation-delay: 0s;
+        }
+        .project-card:nth-child(2) {
+            animation-delay: 0.8s;
+        }
+        .project-card:nth-child(3) {
+            animation-delay: 1.6s;
+        }
+        .project-card:nth-child(4) {
+            animation-delay: 2.4s;
+        }
+
+        @keyframes float-card {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        /* shimmer overlay */
+        .project-card .card-shimmer {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 5;
+            background: linear-gradient(105deg,
+                    transparent 30%,
+                    rgba(212, 136, 15, 0.04) 45%,
+                    rgba(61, 220, 132, 0.03) 55%,
+                    transparent 70%);
+            background-size: 300% 100%;
+            animation: shimmer-sweep 8s ease-in-out infinite;
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        .project-card:hover .card-shimmer {
+            opacity: 1;
+        }
+
+        @keyframes shimmer-sweep {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* animated border glow */
+        .project-card .border-glow {
+            position: absolute;
+            inset: -2px;
+            border-radius: 12px;
+            padding: 2px;
+            background: conic-gradient(from var(--angle, 0deg),
+                    transparent 0%,
+                    var(--copper-dim) 20%,
+                    var(--copper-bright) 40%,
+                    var(--led) 60%,
+                    var(--copper-dim) 80%,
+                    transparent 100%);
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            animation: border-spin 4s linear infinite;
+            animation-play-state: paused;
+        }
+        .project-card:hover .border-glow {
+            opacity: 0.7;
+            animation-play-state: running;
+        }
+
+        @property --angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+        @keyframes border-spin {
+            to {
+                --angle: 360deg;
+            }
+        }
+
+        /* floating dots inside card */
+        .project-card .card-dots {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 3;
+            overflow: hidden;
+            border-radius: inherit;
+            opacity: 0.3;
+        }
+        .project-card .card-dots .dot-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--copper);
+            border-radius: 50%;
+            opacity: 0;
+            animation: dot-float 12s linear infinite;
+            box-shadow: 0 0 6px rgba(212, 136, 15, 0.3);
+        }
+        .project-card .card-dots .dot-particle:nth-child(1) {
+            left: 10%;
+            top: 20%;
+            animation-delay: 0s;
+            animation-duration: 14s;
+        }
+        .project-card .card-dots .dot-particle:nth-child(2) {
+            left: 70%;
+            top: 10%;
+            animation-delay: 2s;
+            animation-duration: 16s;
+        }
+        .project-card .card-dots .dot-particle:nth-child(3) {
+            left: 30%;
+            top: 70%;
+            animation-delay: 4s;
+            animation-duration: 12s;
+        }
+        .project-card .card-dots .dot-particle:nth-child(4) {
+            left: 85%;
+            top: 60%;
+            animation-delay: 1s;
+            animation-duration: 18s;
+        }
+        .project-card .card-dots .dot-particle:nth-child(5) {
+            left: 50%;
+            top: 40%;
+            animation-delay: 3s;
+            animation-duration: 15s;
+        }
+        .project-card .card-dots .dot-particle:nth-child(6) {
+            left: 15%;
+            top: 85%;
+            animation-delay: 5s;
+            animation-duration: 13s;
+        }
+        .project-card .card-dots .dot-particle:nth-child(7) {
+            left: 65%;
+            top: 80%;
+            animation-delay: 2.5s;
+            animation-duration: 17s;
+        }
+        .project-card .card-dots .dot-particle:nth-child(8) {
+            left: 45%;
+            top: 15%;
+            animation-delay: 4.5s;
+            animation-duration: 14s;
+        }
+
+        @keyframes dot-float {
+            0% {
+                opacity: 0;
+                transform: translate(0, 0) scale(0.5);
+            }
+            10% {
+                opacity: 0.8;
+                transform: translate(10px, -20px) scale(1.2);
+            }
+            30% {
+                opacity: 0.6;
+                transform: translate(30px, 10px) scale(0.9);
+            }
+            50% {
+                opacity: 0.9;
+                transform: translate(15px, 30px) scale(1.4);
+            }
+            70% {
+                opacity: 0.5;
+                transform: translate(45px, -10px) scale(0.8);
+            }
+            90% {
+                opacity: 0.3;
+                transform: translate(20px, 20px) scale(1.1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(60px, 40px) scale(0.5);
+            }
+        }
+
+        /* card base styles (overrides) */
         .project-card::before {
             content: '';
             position: absolute;
@@ -1008,12 +1255,16 @@
             mask-composite: exclude;
             pointer-events: none;
             opacity: 0.6;
+            z-index: 1;
         }
+
         .project-card:hover {
             border-color: var(--copper-dim);
-            transform: translateY(-6px);
+            transform: translateY(-6px) scale(1.01);
             box-shadow: 0 20px 50px -18px rgba(212, 136, 15, 0.25);
+            animation-play-state: paused;
         }
+
         .project-card .card-image {
             aspect-ratio: 16/10;
             min-height: 200px;
@@ -1043,6 +1294,8 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            position: relative;
+            z-index: 2;
         }
         .project-card .card-body h4 {
             font-size: 1.05rem;
@@ -1091,6 +1344,16 @@
             background: var(--copper-bright);
             transform: translateY(-2px) scale(1.02);
             box-shadow: 0 8px 24px -6px rgba(212, 136, 15, 0.30);
+        }
+        .project-card .card-body .project-actions .mini-cta.outline {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+        .project-card .card-body .project-actions .mini-cta.outline:hover {
+            background: rgba(212, 136, 15, 0.08);
+            color: var(--copper-bright);
+            border-color: var(--copper-dim);
         }
 
         /* ---- Experience ---- */
@@ -1440,6 +1703,99 @@
             letter-spacing: 0.04em;
         }
 
+        /* ---- Voltage rail (scroll progress) ---- */
+        .voltage-rail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            z-index: 2000;
+            background: rgba(212, 136, 15, 0.08);
+        }
+        .voltage-rail-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--copper), var(--led));
+            box-shadow: 0 0 12px var(--led-glow);
+            transition: width 0.1s linear;
+        }
+
+        /* ---- Boot overlay ---- */
+        .boot-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 14px;
+            transition: opacity 1.2s ease, visibility 1.2s ease;
+        }
+        .boot-overlay.done {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .boot-trace {
+            width: 220px;
+            height: 60px;
+        }
+        .boot-trace path {
+            fill: none;
+            stroke: var(--copper);
+            stroke-width: 1.5;
+            stroke-dasharray: 300;
+            stroke-dashoffset: 300;
+            animation: boot-draw 1.4s var(--transition-smooth) forwards;
+            filter: drop-shadow(0 0 6px var(--copper-dim));
+        }
+        @keyframes boot-draw {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        .boot-text {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            min-height: 1.2em;
+        }
+        .boot-text .ok {
+            color: var(--led);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .boot-overlay {
+                display: none;
+            }
+        }
+
+        /* ---- Card pointer glow ---- */
+        .project-card,
+        .achievement-card,
+        .intersection-item {
+            --mx: 50%;
+            --my: 50%;
+        }
+        .project-card::after,
+        .achievement-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(180px circle at var(--mx) var(--my), rgba(212, 136, 15, 0.10), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .project-card:hover::after,
+        .achievement-card:hover::after {
+            opacity: 1;
+        }
+
         /* ---- Spine ---- */
         .spine {
             position: absolute;
@@ -1752,12 +2108,14 @@
                 height: 300px;
             }
             .hero-ring.r1 {
-                max-width: 380px;
-                max-height: 380px;
+                max-width: 400px;
+                max-height: 400px;
+                border-width: 2px;
             }
             .hero-ring.r2 {
-                max-width: 420px;
-                max-height: 420px;
+                max-width: 460px;
+                max-height: 460px;
+                border-width: 1.8px;
             }
             .achievement-highlight .ach-gallery figure {
                 max-width: 45%;
@@ -1818,28 +2176,38 @@
                 height: 240px;
             }
             .hero-ring.r1 {
-                width: calc(100% + 30px);
-                height: calc(100% + 30px);
-                max-width: 280px;
-                max-height: 280px;
-                border-width: 1.5px;
+                width: calc(100% + 70px);
+                height: calc(100% + 70px);
+                max-width: 310px;
+                max-height: 310px;
+                border-width: 2px;
+                border-style: dashed;
+                opacity: 0.95;
             }
             .hero-ring.r2 {
-                width: calc(100% + 50px);
-                height: calc(100% + 50px);
-                max-width: 320px;
-                max-height: 320px;
-                border-width: 1px;
+                width: calc(100% + 100px);
+                height: calc(100% + 100px);
+                max-width: 360px;
+                max-height: 360px;
+                border-width: 1.8px;
+                opacity: 0.95;
             }
             .hero-ring .dot {
-                width: 10px;
-                height: 10px;
-                top: -5px;
+                width: 12px;
+                height: 12px;
+                top: -6px;
+                box-shadow: 0 0 30px var(--copper-bright), 0 0 60px rgba(212, 136, 15, 0.4);
             }
             .hero-ring .dot.d2 {
-                width: 6px;
-                height: 6px;
-                bottom: -3px;
+                width: 8px;
+                height: 8px;
+                bottom: -4px;
+                box-shadow: 0 0 30px var(--led-glow), 0 0 50px rgba(61, 220, 132, 0.2);
+            }
+            .hero-image-circular::after {
+                inset: -6px;
+                padding: 4px;
+                opacity: 0.85;
             }
 
             .intersection-grid {
@@ -1985,6 +2353,18 @@
             .container {
                 padding: 0 16px;
             }
+
+            /* disable float on mobile for performance */
+            .project-card {
+                animation: none !important;
+                transform: none !important;
+            }
+            .project-card:hover {
+                transform: translateY(-4px) scale(1.01) !important;
+            }
+            .project-card .card-dots .dot-particle {
+                display: none;
+            }
         }
 
         @media (max-width: 480px) {
@@ -2038,28 +2418,37 @@
                 height: 180px;
             }
             .hero-ring.r1 {
-                width: calc(100% + 20px);
-                height: calc(100% + 20px);
-                max-width: 210px;
-                max-height: 210px;
-                border-width: 1px;
-            }
-            .hero-ring.r2 {
-                width: calc(100% + 30px);
-                height: calc(100% + 30px);
+                width: calc(100% + 50px);
+                height: calc(100% + 50px);
                 max-width: 240px;
                 max-height: 240px;
-                border-width: 1px;
+                border-width: 1.8px;
+                opacity: 1;
+            }
+            .hero-ring.r2 {
+                width: calc(100% + 70px);
+                height: calc(100% + 70px);
+                max-width: 270px;
+                max-height: 270px;
+                border-width: 1.5px;
+                opacity: 1;
             }
             .hero-ring .dot {
-                width: 8px;
-                height: 8px;
-                top: -4px;
+                width: 10px;
+                height: 10px;
+                top: -5px;
+                box-shadow: 0 0 25px var(--copper-bright), 0 0 50px rgba(212, 136, 15, 0.35);
             }
             .hero-ring .dot.d2 {
-                width: 5px;
-                height: 5px;
-                bottom: -2px;
+                width: 7px;
+                height: 7px;
+                bottom: -3px;
+                box-shadow: 0 0 25px var(--led-glow), 0 0 40px rgba(61, 220, 132, 0.2);
+            }
+            .hero-image-circular::after {
+                inset: -5px;
+                padding: 3px;
+                opacity: 0.8;
             }
 
             #about::before {
@@ -2110,6 +2499,11 @@
     </style>
 </head>
 <body>
+    <div class="boot-overlay" id="boot-overlay" aria-hidden="true">
+        <svg class="boot-trace" viewBox="0 0 220 60"><path d="M10 30 H70 L85 10 H130 L145 50 H210" /></svg>
+        <div class="boot-text" id="boot-text">INIT…</div>
+    </div>
+    <div class="voltage-rail"><div class="voltage-rail-fill" id="voltage-rail-fill"></div></div>
 
     <!-- Ambient backdrop -->
     <div class="ambient-glow" id="ambient-glow" aria-hidden="true"></div>
@@ -2152,7 +2546,7 @@
                 <h1>Engr. Jorge R. Rojas III</h1>
                 <div class="title-line">
                     Electronics Engineer · Hardware · Software · AI
-                    <span class="badge">ECE</span>
+                    <span class="badge">City of Las Pinas</span>
                 </div>
                 <p class="tagline">
                     Building at the intersection of electronics, embedded systems, software, and AI — turning ideas into impact.
@@ -2172,7 +2566,7 @@
                 </div>
             </div>
 
-            <!-- Hero Image with exaggerated PCB rings -->
+            <!-- Hero Image with PCB rings -->
             <div class="hero-image-wrapper">
                 <div class="hero-ring r1"><span class="dot"></span></div>
                 <div class="hero-ring r2"><span class="dot d2"></span></div>
@@ -2195,7 +2589,7 @@
                 I don't work in one domain — I connect them. Here's where I operate.
             </p>
             <div class="intersection-grid">
-                <!-- EE: Lightning bolt -->
+                <!-- EE -->
                 <div class="intersection-item reveal-item delay-1">
                     <span class="icon-svg">
                         <svg viewBox="0 0 24 24"><polyline points="13 2 4 14 12 14 11 22 20 10 12 10 13 2"/></svg>
@@ -2203,7 +2597,7 @@
                     <h4>Electronics Engineering</h4>
                     <p>Circuit design, signal processing, PCB layout, and system-level thinking.</p>
                 </div>
-                <!-- EMB: Chip -->
+                <!-- EMB -->
                 <div class="intersection-item reveal-item delay-2">
                     <span class="icon-svg">
                         <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="8" y="8" width="8" height="8" rx="1"/><line x1="8" y1="4" x2="8" y2="2"/><line x1="16" y1="4" x2="16" y2="2"/><line x1="8" y1="20" x2="8" y2="22"/><line x1="16" y1="20" x2="16" y2="22"/><line x1="4" y1="8" x2="2" y2="8"/><line x1="4" y1="16" x2="2" y2="16"/><line x1="20" y1="8" x2="22" y2="8"/><line x1="20" y1="16" x2="22" y2="16"/></svg>
@@ -2211,7 +2605,7 @@
                     <h4>Embedded Systems</h4>
                     <p>ESP32, Raspberry Pi, Arduino — sensors, actuators, and real-time control.</p>
                 </div>
-                <!-- SW: Code brackets -->
+                <!-- SW -->
                 <div class="intersection-item reveal-item delay-3">
                     <span class="icon-svg">
                         <svg viewBox="0 0 24 24"><polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/></svg>
@@ -2219,7 +2613,7 @@
                     <h4>Software Development</h4>
                     <p>Python, Django/Flask, REST APIs, web apps, and automation.</p>
                 </div>
-                <!-- AI: Neural network -->
+                <!-- AI -->
                 <div class="intersection-item reveal-item delay-4">
                     <span class="icon-svg">
                         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="5" r="2"/><circle cx="7" cy="9" r="2"/><circle cx="17" cy="9" r="2"/><circle cx="9" cy="17" r="2"/><circle cx="15" cy="17" r="2"/></svg>
@@ -2278,7 +2672,20 @@
 
             <h3 class="reveal" style="margin-top:2rem;">Other Projects</h3>
             <div class="project-grid">
+                <!-- Rubik's Cube Solver -->
                 <div class="project-card reveal-item delay-1">
+                    <div class="card-shimmer"></div>
+                    <div class="border-glow"></div>
+                    <div class="card-dots">
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                    </div>
                     <div class="card-image clickable-image" data-lightbox-title="Rubik's Cube Solver" tabindex="0" role="button">
                         <span class="scanline"></span>
                         <span class="circuit-node n1"></span>
@@ -2298,7 +2705,20 @@
                     </div>
                 </div>
 
+                <!-- Arduino Music Box — with Facebook button -->
                 <div class="project-card reveal-item delay-2">
+                    <div class="card-shimmer"></div>
+                    <div class="border-glow"></div>
+                    <div class="card-dots">
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                    </div>
                     <div class="card-image clickable-image" data-lightbox-title="Arduino Music Box — iAcademy presentation" tabindex="0" role="button">
                         <span class="scanline"></span><span class="circuit-node n3"></span>
                         <img src="img/iacademy.jpg" alt="Music Box presentation at iAcademy" />
@@ -2309,10 +2729,28 @@
                         <div class="tech-tags">
                             <span>Arduino</span><span>C++</span><span>Embedded</span>
                         </div>
+                        <div class="project-actions">
+                            <a href="https://www.facebook.com/jorgereluniarojas/videos/833719994987136/" target="_blank" rel="noopener" class="mini-cta">
+                                Watch on Facebook →
+                            </a>
+                        </div>
                     </div>
                 </div>
 
+                <!-- packetHACKS 2024 -->
                 <div class="project-card reveal-item delay-3">
+                    <div class="card-shimmer"></div>
+                    <div class="border-glow"></div>
+                    <div class="card-dots">
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                    </div>
                     <div class="card-image clickable-image" data-lightbox-title="packetHACKS 2024 — team" tabindex="0" role="button">
                         <span class="scanline"></span><span class="circuit-node n1"></span>
                         <img src="img/packethacks-team.webp" alt="packetHACKS 2024 team" />
@@ -2326,7 +2764,20 @@
                     </div>
                 </div>
 
+                <!-- IoT Attendance System -->
                 <div class="project-card reveal-item delay-4">
+                    <div class="card-shimmer"></div>
+                    <div class="border-glow"></div>
+                    <div class="card-dots">
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                        <span class="dot-particle"></span>
+                    </div>
                     <div class="card-image clickable-image" data-lightbox-title="IoT Attendance System — placeholder" tabindex="0" role="button">
                         <span class="scanline"></span><span class="circuit-node n2"></span>
                         <div class="placeholder-image">
@@ -2403,7 +2854,6 @@
             </div>
 
             <div class="achievement-grid">
-                <!-- IT Passport: Document -->
                 <div class="achievement-card reveal-item delay-1">
                     <span class="icon-svg">
                         <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8v8H8z"/><line x1="8" y1="4" x2="8" y2="2"/><line x1="16" y1="4" x2="16" y2="2"/><line x1="4" y1="8" x2="2" y2="8"/><line x1="4" y1="16" x2="2" y2="16"/><line x1="20" y1="8" x2="22" y2="8"/><line x1="20" y1="16" x2="22" y2="16"/></svg>
@@ -2411,7 +2861,6 @@
                     <h4>IT Passport Certification</h4>
                     <p>Philippine National IT Standards Foundation, 2024</p>
                 </div>
-                <!-- packetHACKS: Shield / Trophy -->
                 <div class="achievement-card reveal-item delay-2">
                     <span class="icon-svg">
                         <svg viewBox="0 0 24 24"><path d="M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8L12 2Z"/></svg>
@@ -2419,7 +2868,6 @@
                     <h4>packetHACKS 2024 Finalist</h4>
                     <p>IoT Hackathon finalist</p>
                 </div>
-                <!-- Algolympics: Code/Algorithm -->
                 <div class="achievement-card reveal-item delay-3">
                     <span class="icon-svg">
                         <svg viewBox="0 0 24 24"><polyline points="6 6 2 12 6 18"/><polyline points="18 6 22 12 18 18"/><line x1="14" y1="6" x2="10" y2="18"/></svg>
@@ -2427,7 +2875,6 @@
                     <h4>Algolympics 2022 Finalist</h4>
                     <p>Competitive programming finalist</p>
                 </div>
-                <!-- Code Up: Star -->
                 <div class="achievement-card reveal-item delay-4">
                     <span class="icon-svg">
                         <svg viewBox="0 0 24 24"><path d="M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8L12 2Z"/></svg>
@@ -2447,7 +2894,7 @@
             <div class="skills-grid">
                 <div class="skills-group reveal-item delay-1">
                     <h4>Programming</h4>
-                    <ul><li>Python</li><li>Arduino C++</li><li>JavaScript (basic)</li></ul>
+                    <ul><li>Python</li><li>Arduino C++</li></ul>
                 </div>
                 <div class="skills-group reveal-item delay-2">
                     <h4>Embedded Systems</h4>
@@ -2528,6 +2975,37 @@
     </div>
 
     <script>
+        // Boot sequence
+        const bootOverlay = document.getElementById('boot-overlay');
+        const bootText = document.getElementById('boot-text');
+        const bootSteps = ['INIT…', 'LOADING MODULES…', 'SYSTEM READY <span class="ok">●</span>'];
+        let bootI = 0;
+        const bootInterval = setInterval(() => {
+            bootI++;
+            if (bootI < bootSteps.length) bootText.innerHTML = bootSteps[bootI];
+            if (bootI >= bootSteps.length - 1) {
+                clearInterval(bootInterval);
+                setTimeout(() => bootOverlay.classList.add('done'), 1000);
+            }
+        }, 1200);
+
+        // Voltage rail
+        const railFill = document.getElementById('voltage-rail-fill');
+        window.addEventListener('scroll', () => {
+            const h = document.documentElement;
+            const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+            railFill.style.width = pct + '%';
+        }, { passive: true });
+
+        // Card pointer glow
+        document.querySelectorAll('.project-card, .achievement-card').forEach(card => {
+            card.addEventListener('pointermove', (e) => {
+                const r = card.getBoundingClientRect();
+                card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+                card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+            });
+        });
+
         // ----- Mobile menu toggle -----
         const toggle = document.querySelector('.menu-toggle');
         const navList = document.getElementById('nav-list');
@@ -2690,23 +3168,37 @@
             });
         });
 
-        // ----- Ambient glow (desktop only) -----
+        // ----- Ambient glow (desktop only, but we keep it for all) -----
         const ambientGlow = document.getElementById('ambient-glow');
         const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        if (ambientGlow && !isTouch && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            let rafId = null;
-            window.addEventListener('pointermove', (e) => {
-                if (rafId) cancelAnimationFrame(rafId);
-                rafId = requestAnimationFrame(() => {
-                    ambientGlow.style.left = e.clientX + 'px';
-                    ambientGlow.style.top = e.clientY + 'px';
-                });
-            }, { passive: true });
-        } else if (ambientGlow && isTouch) {
+        if (ambientGlow && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            if (!isTouch) {
+                let rafId = null;
+                window.addEventListener('pointermove', (e) => {
+                    if (rafId) cancelAnimationFrame(rafId);
+                    rafId = requestAnimationFrame(() => {
+                        ambientGlow.style.left = e.clientX + 'px';
+                        ambientGlow.style.top = e.clientY + 'px';
+                    });
+                }, { passive: true });
+            } else {
+                ambientGlow.style.left = '50%';
+                ambientGlow.style.top = '20%';
+                ambientGlow.style.transform = 'translate(-50%, -50%)';
+            }
+        } else if (ambientGlow) {
             ambientGlow.style.display = 'none';
         }
 
-        console.log('Portfolio ready — modern, animated, professional.');
+        // Force animations on mobile if reduce-motion is not enabled
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.querySelectorAll('.hero-ring, .hero-image-circular::after, .hero-image-circular .scanline').forEach(
+            el => {
+                el.style.willChange = 'transform';
+            });
+        }
+
+        console.log('Portfolio ready — animations active on all devices (unless reduce-motion is enabled).');
     </script>
 
 </body>
