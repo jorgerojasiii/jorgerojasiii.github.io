@@ -97,20 +97,6 @@
                 transition-duration: 0.001ms !important;
                 scroll-behavior: auto !important;
             }
-            .hero-ring {
-                opacity: 0.5 !important;
-            }
-            .hero-ring .dot {
-                opacity: 0.6 !important;
-                animation: none !important;
-            }
-            .hero-image-circular::after {
-                animation: none !important;
-            }
-            .hero-image-circular .scanline {
-                animation: none !important;
-                opacity: 0.15 !important;
-            }
             .pcb-backdrop {
                 animation: none !important;
             }
@@ -138,8 +124,30 @@
             .project-card .border-glow {
                 animation: none !important;
             }
-            .project-card .float-anim {
+            .electron-orbit {
                 animation: none !important;
+            }
+            .electron-orbit .electron-particle {
+                animation: none !important;
+            }
+            .electron-orbit .orbit-ring {
+                animation: none !important;
+            }
+            .hero-image-circular::after {
+                animation: none !important;
+                opacity: 0.2 !important;
+            }
+            .hero-image-circular .scanline {
+                animation: none !important;
+                opacity: 0.1 !important;
+            }
+            .hero-image-circular .pulse-ring {
+                animation: none !important;
+                opacity: 0.2 !important;
+            }
+            .electron-orbit .glow-trail {
+                animation: none !important;
+                opacity: 0.1 !important;
             }
         }
 
@@ -624,92 +632,271 @@
         }
 
         /* ============================================================
-           HERO IMAGE with EXAGGERATED PCB ANIMATIONS
+           HERO IMAGE with ELECTRON ORBITS
            ============================================================ */
         .hero-image-wrapper {
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            max-width: 420px;
+            margin: 0 auto;
         }
 
-        .hero-ring {
+        /* --- Electron Orbits Container --- */
+        .electron-orbits {
             position: absolute;
-            border-radius: 50%;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Each orbit is a full-size container with a rotating wrapper */
+        .electron-orbit {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: orbit-spin var(--orbit-speed, 6s) linear infinite;
+            will-change: transform;
+        }
+        .electron-orbit.reverse {
+            animation-direction: reverse;
+        }
+        .electron-orbit.fast {
+            animation-duration: var(--orbit-speed-fast, 3.5s);
+        }
+        .electron-orbit.slow {
+            animation-duration: var(--orbit-speed-slow, 10s);
+        }
+        @keyframes orbit-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Orbit ring - SVG or circle element */
+        .orbit-ring {
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .orbit-ring svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .orbit-ring .ring-path {
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Electron particle */
+        .electron-particle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
             pointer-events: none;
             will-change: transform;
+            filter: drop-shadow(0 0 8px var(--electron-glow, rgba(212, 136, 15, 0.6)));
+            transition: filter 0.3s ease;
         }
-        .hero-ring.r1 {
-            width: calc(100% + 100px);
-            height: calc(100% + 100px);
-            max-width: 480px;
-            max-height: 480px;
-            border: 2.5px dashed rgba(212, 136, 15, 0.6);
-            animation: ring-spin 20s linear infinite;
-            box-shadow: 0 0 50px rgba(212, 136, 15, 0.08), inset 0 0 50px rgba(212, 136, 15, 0.03);
-            opacity: 0.9;
+        .electron-particle .core {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--electron-color, var(--copper-bright));
+            box-shadow: 0 0 20px var(--electron-glow, rgba(212, 136, 15, 0.5)), inset 0 0 6px rgba(255, 255, 255, 0.3);
+            animation: electron-pulse 1.2s ease-in-out infinite alternate;
         }
-        .hero-ring.r2 {
-            width: calc(100% + 160px);
-            height: calc(100% + 160px);
-            max-width: 540px;
-            max-height: 540px;
-            border: 2px solid var(--copper-bright);
-            border-right-color: transparent;
-            border-bottom-color: rgba(212, 136, 15, 0.15);
-            animation: ring-spin 10s linear infinite reverse;
-            box-shadow: 0 0 90px rgba(212, 136, 15, 0.1), inset 0 0 90px rgba(212, 136, 15, 0.05);
-            opacity: 0.95;
+        .electron-particle .core.green {
+            background: var(--led);
+            box-shadow: 0 0 24px var(--led-glow), inset 0 0 6px rgba(255, 255, 255, 0.3);
         }
-        @keyframes ring-spin {
-            to {
-                transform: translate(-50%, -50%) rotate(360deg);
-            }
+        .electron-particle .core.gold {
+            background: var(--copper-bright);
+            box-shadow: 0 0 24px rgba(212, 136, 15, 0.6), inset 0 0 6px rgba(255, 255, 255, 0.3);
+        }
+        .electron-particle .core.orange {
+            background: #e8942a;
+            box-shadow: 0 0 20px rgba(232, 148, 42, 0.5), inset 0 0 6px rgba(255, 255, 255, 0.2);
+        }
+        .electron-particle .core.cyan {
+            background: #3ddc84;
+            box-shadow: 0 0 20px rgba(61, 220, 132, 0.4), inset 0 0 6px rgba(255, 255, 255, 0.2);
         }
 
-        .hero-ring .dot {
-            position: absolute;
-            width: 14px;
-            height: 14px;
-            background: var(--copper-bright);
-            border-radius: 50%;
-            top: -7px;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 0 35px var(--copper-bright), 0 0 80px rgba(212, 136, 15, 0.5);
-            animation: pulse-dot 1.5s ease-in-out infinite alternate;
-            will-change: transform, opacity;
-        }
-        .hero-ring .dot.d2 {
-            width: 10px;
-            height: 10px;
-            background: var(--led);
-            box-shadow: 0 0 35px var(--led-glow), 0 0 70px rgba(61, 220, 132, 0.25);
-            top: auto;
-            bottom: -5px;
-            left: 30%;
-            animation-duration: 1s;
-            animation-delay: 0.5s;
-        }
-        @keyframes pulse-dot {
+        @keyframes electron-pulse {
             0% {
-                opacity: 0.25;
-                transform: translateX(-50%) scale(0.6);
+                transform: scale(0.85);
+                opacity: 0.7;
             }
             100% {
+                transform: scale(1.25);
                 opacity: 1;
-                transform: translateX(-50%) scale(1.4);
             }
         }
 
+        /* Glow trail behind electron */
+        .electron-particle .glow-trail {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            pointer-events: none;
+            background: radial-gradient(circle, var(--electron-glow, rgba(212, 136, 15, 0.15)), transparent 70%);
+            animation: trail-pulse 1.8s ease-in-out infinite alternate;
+            will-change: transform, opacity;
+            z-index: -1;
+        }
+        @keyframes trail-pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.6);
+                opacity: 0.2;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.8);
+                opacity: 0.6;
+            }
+        }
+
+        /* ---- Orbit-specific sizes and styles ---- */
+        /* Orbit 1: largest, solid, thick */
+        .orbit-1 .orbit-ring {
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            max-width: 420px;
+            max-height: 420px;
+        }
+        .orbit-1 .ring-path {
+            stroke: var(--copper);
+            stroke-width: 2.5;
+            opacity: 0.5;
+        }
+        .orbit-1 .electron-particle {
+            width: 16px;
+            height: 16px;
+            --electron-color: var(--copper-bright);
+            --electron-glow: rgba(212, 136, 15, 0.6);
+            top: -8px;
+        }
+        .orbit-1 .electron-particle .core {
+            background: var(--copper-bright);
+            box-shadow: 0 0 24px rgba(212, 136, 15, 0.6), inset 0 0 6px rgba(255, 255, 255, 0.3);
+        }
+        .orbit-1 .electron-particle .glow-trail {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(212, 136, 15, 0.15), transparent 70%);
+        }
+
+        /* Orbit 2: dashed, medium */
+        .orbit-2 .orbit-ring {
+            width: calc(100% - 60px);
+            height: calc(100% - 60px);
+            max-width: 380px;
+            max-height: 380px;
+        }
+        .orbit-2 .ring-path {
+            stroke: var(--led);
+            stroke-width: 2;
+            stroke-dasharray: 12 16;
+            opacity: 0.45;
+        }
+        .orbit-2 .electron-particle {
+            width: 12px;
+            height: 12px;
+            --electron-color: var(--led);
+            --electron-glow: var(--led-glow);
+            top: -6px;
+        }
+        .orbit-2 .electron-particle .core {
+            background: var(--led);
+            box-shadow: 0 0 20px var(--led-glow), inset 0 0 4px rgba(255, 255, 255, 0.3);
+        }
+        .orbit-2 .electron-particle .glow-trail {
+            width: 45px;
+            height: 45px;
+            background: radial-gradient(circle, rgba(61, 220, 132, 0.12), transparent 70%);
+        }
+
+        /* Orbit 3: dotted, thin */
+        .orbit-3 .orbit-ring {
+            width: calc(100% - 100px);
+            height: calc(100% - 100px);
+            max-width: 340px;
+            max-height: 340px;
+        }
+        .orbit-3 .ring-path {
+            stroke: var(--copper-bright);
+            stroke-width: 1.8;
+            stroke-dasharray: 4 12;
+            opacity: 0.4;
+        }
+        .orbit-3 .electron-particle {
+            width: 10px;
+            height: 10px;
+            --electron-color: #e8942a;
+            --electron-glow: rgba(232, 148, 42, 0.5);
+            top: -5px;
+        }
+        .orbit-3 .electron-particle .core {
+            background: #e8942a;
+            box-shadow: 0 0 18px rgba(232, 148, 42, 0.5), inset 0 0 4px rgba(255, 255, 255, 0.2);
+        }
+        .orbit-3 .electron-particle .glow-trail {
+            width: 35px;
+            height: 35px;
+            background: radial-gradient(circle, rgba(232, 148, 42, 0.1), transparent 70%);
+        }
+
+        /* Orbit 4: solid, thin, inner */
+        .orbit-4 .orbit-ring {
+            width: calc(100% - 140px);
+            height: calc(100% - 140px);
+            max-width: 300px;
+            max-height: 300px;
+        }
+        .orbit-4 .ring-path {
+            stroke: var(--led);
+            stroke-width: 1.2;
+            opacity: 0.3;
+        }
+        .orbit-4 .electron-particle {
+            width: 8px;
+            height: 8px;
+            --electron-color: #3ddc84;
+            --electron-glow: rgba(61, 220, 132, 0.4);
+            top: -4px;
+        }
+        .orbit-4 .electron-particle .core {
+            background: #3ddc84;
+            box-shadow: 0 0 14px rgba(61, 220, 132, 0.4), inset 0 0 3px rgba(255, 255, 255, 0.2);
+        }
+        .orbit-4 .electron-particle .glow-trail {
+            width: 28px;
+            height: 28px;
+            background: radial-gradient(circle, rgba(61, 220, 132, 0.08), transparent 70%);
+        }
+
+        /* ---- Hero image circle ---- */
         .hero-image-circular {
             position: relative;
-            width: 360px;
-            height: 360px;
-            flex-shrink: 0;
+            width: 80%;
+            aspect-ratio: 1 / 1;
+            max-width: 320px;
             border-radius: 50%;
             overflow: hidden;
             background: var(--bg-panel);
@@ -717,22 +904,23 @@
             box-shadow: var(--shadow-card), 0 0 60px -12px rgba(212, 136, 15, 0.06);
             transition: transform 0.5s var(--transition-bounce), box-shadow 0.5s ease;
             cursor: pointer;
-            z-index: 1;
+            z-index: 3;
+            flex-shrink: 0;
         }
         .hero-image-circular::after {
             content: '';
             position: absolute;
-            inset: -8px;
+            inset: -6px;
             border-radius: 50%;
-            padding: 5px;
+            padding: 4px;
             background: conic-gradient(from 0deg, var(--copper), var(--led), var(--copper-bright), var(--copper), var(--led), var(--copper));
             -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             pointer-events: none;
-            animation: spin-border 4s linear infinite;
-            z-index: 2;
-            opacity: 0.9;
+            animation: spin-border 5s linear infinite;
+            z-index: 5;
+            opacity: 0.85;
             will-change: transform;
         }
         @keyframes spin-border {
@@ -771,10 +959,10 @@
             pointer-events: none;
             background: linear-gradient(to bottom,
                     transparent,
-                    rgba(61, 220, 132, 0.08),
-                    rgba(240, 165, 54, 0.15),
+                    rgba(61, 220, 132, 0.06),
+                    rgba(240, 165, 54, 0.12),
                     transparent);
-            opacity: 0.6;
+            opacity: 0.5;
             transform: skewY(-2deg);
             animation: scanline-move 7s linear infinite;
             will-change: top;
@@ -789,6 +977,28 @@
             }
         }
 
+        .hero-image-circular .pulse-ring {
+            position: absolute;
+            inset: 8px;
+            border-radius: 50%;
+            border: 1px solid rgba(212, 136, 15, 0.08);
+            pointer-events: none;
+            z-index: 3;
+            animation: pulse-ring 4s ease-in-out infinite;
+        }
+        @keyframes pulse-ring {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.04);
+                opacity: 0.7;
+            }
+        }
+
+        /* Hero content animations */
         .hero-content h1,
         .hero-content .title-line,
         .hero-content .tagline,
@@ -1045,11 +1255,9 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             display: flex;
             flex-direction: column;
-            /* floating animation base */
             animation: float-card 6s ease-in-out infinite;
             animation-play-state: running;
         }
-        /* staggered float delays */
         .project-card:nth-child(1) {
             animation-delay: 0s;
         }
@@ -1073,7 +1281,6 @@
             }
         }
 
-        /* shimmer overlay */
         .project-card .card-shimmer {
             position: absolute;
             inset: 0;
@@ -1103,7 +1310,6 @@
             }
         }
 
-        /* animated border glow */
         .project-card .border-glow {
             position: absolute;
             inset: -2px;
@@ -1142,7 +1348,6 @@
             }
         }
 
-        /* floating dots inside card */
         .project-card .card-dots {
             position: absolute;
             inset: 0;
@@ -1242,7 +1447,6 @@
             }
         }
 
-        /* card base styles (overrides) */
         .project-card::before {
             content: '';
             position: absolute;
@@ -2104,18 +2308,35 @@
                 gap: 1.4rem;
             }
             .hero-image-circular {
-                width: 300px;
-                height: 300px;
+                width: 280px;
+                height: 280px;
             }
-            .hero-ring.r1 {
-                max-width: 400px;
-                max-height: 400px;
-                border-width: 2px;
+            .hero-image-wrapper {
+                max-width: 360px;
             }
-            .hero-ring.r2 {
-                max-width: 460px;
-                max-height: 460px;
-                border-width: 1.8px;
+            .orbit-1 .orbit-ring {
+                width: calc(100% - 16px);
+                height: calc(100% - 16px);
+                max-width: 360px;
+                max-height: 360px;
+            }
+            .orbit-2 .orbit-ring {
+                width: calc(100% - 50px);
+                height: calc(100% - 50px);
+                max-width: 330px;
+                max-height: 330px;
+            }
+            .orbit-3 .orbit-ring {
+                width: calc(100% - 80px);
+                height: calc(100% - 80px);
+                max-width: 300px;
+                max-height: 300px;
+            }
+            .orbit-4 .orbit-ring {
+                width: calc(100% - 110px);
+                height: calc(100% - 110px);
+                max-width: 270px;
+                max-height: 270px;
             }
             .achievement-highlight .ach-gallery figure {
                 max-width: 45%;
@@ -2170,44 +2391,76 @@
             .hero-image-wrapper {
                 display: flex;
                 justify-content: center;
+                max-width: 320px;
             }
             .hero-image-circular {
-                width: 240px;
-                height: 240px;
-            }
-            .hero-ring.r1 {
-                width: calc(100% + 70px);
-                height: calc(100% + 70px);
-                max-width: 310px;
-                max-height: 310px;
-                border-width: 2px;
-                border-style: dashed;
-                opacity: 0.95;
-            }
-            .hero-ring.r2 {
-                width: calc(100% + 100px);
-                height: calc(100% + 100px);
-                max-width: 360px;
-                max-height: 360px;
-                border-width: 1.8px;
-                opacity: 0.95;
-            }
-            .hero-ring .dot {
-                width: 12px;
-                height: 12px;
-                top: -6px;
-                box-shadow: 0 0 30px var(--copper-bright), 0 0 60px rgba(212, 136, 15, 0.4);
-            }
-            .hero-ring .dot.d2 {
-                width: 8px;
-                height: 8px;
-                bottom: -4px;
-                box-shadow: 0 0 30px var(--led-glow), 0 0 50px rgba(61, 220, 132, 0.2);
+                width: 220px;
+                height: 220px;
             }
             .hero-image-circular::after {
                 inset: -6px;
                 padding: 4px;
                 opacity: 0.85;
+            }
+            .orbit-1 .orbit-ring {
+                width: calc(100% - 12px);
+                height: calc(100% - 12px);
+                max-width: 300px;
+                max-height: 300px;
+            }
+            .orbit-1 .electron-particle {
+                width: 14px;
+                height: 14px;
+                top: -7px;
+            }
+            .orbit-2 .orbit-ring {
+                width: calc(100% - 40px);
+                height: calc(100% - 40px);
+                max-width: 275px;
+                max-height: 275px;
+            }
+            .orbit-2 .electron-particle {
+                width: 11px;
+                height: 11px;
+                top: -5.5px;
+            }
+            .orbit-3 .orbit-ring {
+                width: calc(100% - 65px);
+                height: calc(100% - 65px);
+                max-width: 250px;
+                max-height: 250px;
+            }
+            .orbit-3 .electron-particle {
+                width: 9px;
+                height: 9px;
+                top: -4.5px;
+            }
+            .orbit-4 .orbit-ring {
+                width: calc(100% - 90px);
+                height: calc(100% - 90px);
+                max-width: 225px;
+                max-height: 225px;
+            }
+            .orbit-4 .electron-particle {
+                width: 7px;
+                height: 7px;
+                top: -3.5px;
+            }
+            .orbit-1 .electron-particle .glow-trail {
+                width: 50px;
+                height: 50px;
+            }
+            .orbit-2 .electron-particle .glow-trail {
+                width: 38px;
+                height: 38px;
+            }
+            .orbit-3 .electron-particle .glow-trail {
+                width: 28px;
+                height: 28px;
+            }
+            .orbit-4 .electron-particle .glow-trail {
+                width: 22px;
+                height: 22px;
             }
 
             .intersection-grid {
@@ -2354,7 +2607,6 @@
                 padding: 0 16px;
             }
 
-            /* disable float on mobile for performance */
             .project-card {
                 animation: none !important;
                 transform: none !important;
@@ -2364,6 +2616,31 @@
             }
             .project-card .card-dots .dot-particle {
                 display: none;
+            }
+            /* Electron orbits on mobile: reduce speed slightly for performance */
+            .electron-orbit {
+                animation-duration: var(--orbit-speed-mobile, 8s) !important;
+            }
+            .electron-orbit.fast {
+                animation-duration: var(--orbit-speed-fast-mobile, 5s) !important;
+            }
+            .electron-orbit.slow {
+                animation-duration: var(--orbit-speed-slow-mobile, 14s) !important;
+            }
+            .electron-orbit .ring-path {
+                opacity: 0.3 !important;
+            }
+            .orbit-1 .ring-path {
+                stroke-width: 2 !important;
+            }
+            .orbit-2 .ring-path {
+                stroke-width: 1.6 !important;
+            }
+            .orbit-3 .ring-path {
+                stroke-width: 1.4 !important;
+            }
+            .orbit-4 .ring-path {
+                stroke-width: 1 !important;
             }
         }
         @media (min-width: 769px) {
@@ -2420,42 +2697,89 @@
                 width: 40px;
                 height: 14px;
             }
+            .hero-image-wrapper {
+                max-width: 260px;
+            }
             .hero-image-circular {
                 width: 180px;
                 height: 180px;
-            }
-            .hero-ring.r1 {
-                width: calc(100% + 50px);
-                height: calc(100% + 50px);
-                max-width: 240px;
-                max-height: 240px;
-                border-width: 1.8px;
-                opacity: 1;
-            }
-            .hero-ring.r2 {
-                width: calc(100% + 70px);
-                height: calc(100% + 70px);
-                max-width: 270px;
-                max-height: 270px;
-                border-width: 1.5px;
-                opacity: 1;
-            }
-            .hero-ring .dot {
-                width: 10px;
-                height: 10px;
-                top: -5px;
-                box-shadow: 0 0 25px var(--copper-bright), 0 0 50px rgba(212, 136, 15, 0.35);
-            }
-            .hero-ring .dot.d2 {
-                width: 7px;
-                height: 7px;
-                bottom: -3px;
-                box-shadow: 0 0 25px var(--led-glow), 0 0 40px rgba(61, 220, 132, 0.2);
             }
             .hero-image-circular::after {
                 inset: -5px;
                 padding: 3px;
                 opacity: 0.8;
+            }
+            .orbit-1 .orbit-ring {
+                width: calc(100% - 10px);
+                height: calc(100% - 10px);
+                max-width: 250px;
+                max-height: 250px;
+            }
+            .orbit-1 .electron-particle {
+                width: 12px;
+                height: 12px;
+                top: -6px;
+            }
+            .orbit-2 .orbit-ring {
+                width: calc(100% - 30px);
+                height: calc(100% - 30px);
+                max-width: 230px;
+                max-height: 230px;
+            }
+            .orbit-2 .electron-particle {
+                width: 10px;
+                height: 10px;
+                top: -5px;
+            }
+            .orbit-3 .orbit-ring {
+                width: calc(100% - 50px);
+                height: calc(100% - 50px);
+                max-width: 210px;
+                max-height: 210px;
+            }
+            .orbit-3 .electron-particle {
+                width: 8px;
+                height: 8px;
+                top: -4px;
+            }
+            .orbit-4 .orbit-ring {
+                width: calc(100% - 70px);
+                height: calc(100% - 70px);
+                max-width: 190px;
+                max-height: 190px;
+            }
+            .orbit-4 .electron-particle {
+                width: 6px;
+                height: 6px;
+                top: -3px;
+            }
+            .orbit-1 .electron-particle .glow-trail {
+                width: 40px;
+                height: 40px;
+            }
+            .orbit-2 .electron-particle .glow-trail {
+                width: 32px;
+                height: 32px;
+            }
+            .orbit-3 .electron-particle .glow-trail {
+                width: 24px;
+                height: 24px;
+            }
+            .orbit-4 .electron-particle .glow-trail {
+                width: 18px;
+                height: 18px;
+            }
+            .orbit-1 .ring-path {
+                stroke-width: 1.8 !important;
+            }
+            .orbit-2 .ring-path {
+                stroke-width: 1.4 !important;
+            }
+            .orbit-3 .ring-path {
+                stroke-width: 1.2 !important;
+            }
+            .orbit-4 .ring-path {
+                stroke-width: 0.9 !important;
             }
 
             #about::before {
@@ -2549,17 +2873,73 @@
     <!-- Hero -->
     <section id="hero">
         <div class="container">
-            <!-- Hero Image with PCB rings -->
+            <!-- Hero Image with Electron Orbits -->
             <div class="hero-image-wrapper">
-                <div class="hero-ring r1"><span class="dot"></span></div>
-                <div class="hero-ring r2"><span class="dot d2"></span></div>
+                <!-- Electron Orbits Layer -->
+                <div class="electron-orbits" aria-hidden="true">
+                    <!-- Orbit 1: largest, solid copper, thick, slow -->
+                    <div class="electron-orbit orbit-1" style="--orbit-speed: 12s;">
+                        <div class="orbit-ring">
+                            <svg viewBox="-220 -220 440 440" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="0" cy="0" r="200" class="ring-path" />
+                            </svg>
+                        </div>
+                        <div class="electron-particle">
+                            <div class="glow-trail"></div>
+                            <div class="core gold"></div>
+                        </div>
+                    </div>
+
+                    <!-- Orbit 2: dashed, medium speed, green -->
+                    <div class="electron-orbit orbit-2 reverse" style="--orbit-speed: 8s;">
+                        <div class="orbit-ring">
+                            <svg viewBox="-220 -220 440 440" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="0" cy="0" r="175" class="ring-path" />
+                            </svg>
+                        </div>
+                        <div class="electron-particle">
+                            <div class="glow-trail"></div>
+                            <div class="core green"></div>
+                        </div>
+                    </div>
+
+                    <!-- Orbit 3: dotted, fast, orange -->
+                    <div class="electron-orbit orbit-3 fast" style="--orbit-speed-fast: 4.5s;">
+                        <div class="orbit-ring">
+                            <svg viewBox="-220 -220 440 440" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="0" cy="0" r="150" class="ring-path" />
+                            </svg>
+                        </div>
+                        <div class="electron-particle">
+                            <div class="glow-trail"></div>
+                            <div class="core orange"></div>
+                        </div>
+                    </div>
+
+                    <!-- Orbit 4: thin, solid, slow reverse, cyan -->
+                    <div class="electron-orbit orbit-4 reverse slow" style="--orbit-speed-slow: 16s;">
+                        <div class="orbit-ring">
+                            <svg viewBox="-220 -220 440 440" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="0" cy="0" r="125" class="ring-path" />
+                            </svg>
+                        </div>
+                        <div class="electron-particle">
+                            <div class="glow-trail"></div>
+                            <div class="core cyan"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main portrait -->
                 <div class="hero-image-circular clickable-image" data-lightbox-title="Graduation portrait — Jorge R. Rojas III" tabindex="0" role="button">
                     <div class="frame">
                         <span class="scanline"></span>
+                        <span class="pulse-ring"></span>
                         <img src="img/graduation.png" alt="Jorge R. Rojas III graduation portrait" />
                     </div>
                 </div>
             </div>
+
             <div class="hero-content">
                 <h1>Engr. Jorge R. Rojas III</h1>
                 <div class="title-line">
@@ -3035,18 +3415,43 @@
             navbar.classList.toggle('scrolled', window.scrollY > 40);
         }, { passive: true });
 
-        // ----- Active nav link on scroll -----
+        // ----- Active nav link on scroll (fixed: includes Contact) -----
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('nav ul a');
-        window.addEventListener('scroll', () => {
+
+        function updateActiveNav() {
+            const scrollY = window.scrollY;
+            const offset = 140;
             let current = '';
+            let lastSectionTop = 0;
+
             sections.forEach(section => {
-                if (window.scrollY >= section.offsetTop - 140) current = section.getAttribute('id');
+                const top = section.offsetTop;
+                const bottom = top + section.offsetHeight;
+                if (scrollY >= top - offset && scrollY < bottom - offset) {
+                    current = section.getAttribute('id');
+                }
+                lastSectionTop = top;
             });
+
+            const lastSection = sections[sections.length - 1];
+            if (lastSection && scrollY + window.innerHeight >= document.documentElement.scrollHeight - 20) {
+                current = lastSection.getAttribute('id');
+            }
+
             navLinks.forEach(link => {
-                link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+                const href = link.getAttribute('href');
+                if (href === '#' + current) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
             });
-        }, { passive: true });
+        }
+
+        window.addEventListener('scroll', updateActiveNav, { passive: true });
+        window.addEventListener('resize', updateActiveNav, { passive: true });
+        setTimeout(updateActiveNav, 300);
 
         // ----- Hero domain indicator cycle -----
         const domains = ['Hardware', 'Embedded', 'Software', 'AI'];
@@ -3177,7 +3582,7 @@
             });
         });
 
-        // ----- Ambient glow (desktop only, but we keep it for all) -----
+        // ----- Ambient glow (desktop only) -----
         const ambientGlow = document.getElementById('ambient-glow');
         const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
         if (ambientGlow && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -3201,13 +3606,13 @@
 
         // Force animations on mobile if reduce-motion is not enabled
         if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.querySelectorAll('.hero-ring, .hero-image-circular::after, .hero-image-circular .scanline').forEach(
-                el => {
-                    el.style.willChange = 'transform';
+            document.querySelectorAll('.electron-orbit, .electron-particle .core, .electron-particle .glow-trail')
+                .forEach(el => {
+                    el.style.willChange = 'transform, opacity';
                 });
         }
 
-        console.log('Portfolio ready — animations active on all devices (unless reduce-motion is enabled).');
+        console.log('Portfolio ready — Electron orbits active with varying line styles and speeds.');
     </script>
 
 </body>
