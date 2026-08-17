@@ -2366,6 +2366,13 @@
                 display: none;
             }
         }
+        @media (min-width: 769px) {
+            #hero h1 {
+                white-space: nowrap;
+                font-size: clamp(2rem, 3.5vw, 3.2rem);
+                letter-spacing: -0.02em;
+            }
+        }
 
         @media (max-width: 480px) {
             .intersection-grid {
@@ -2542,6 +2549,17 @@
     <!-- Hero -->
     <section id="hero">
         <div class="container">
+            <!-- Hero Image with PCB rings -->
+            <div class="hero-image-wrapper">
+                <div class="hero-ring r1"><span class="dot"></span></div>
+                <div class="hero-ring r2"><span class="dot d2"></span></div>
+                <div class="hero-image-circular clickable-image" data-lightbox-title="Graduation portrait — Jorge R. Rojas III" tabindex="0" role="button">
+                    <div class="frame">
+                        <span class="scanline"></span>
+                        <img src="img/graduation.png" alt="Jorge R. Rojas III graduation portrait" />
+                    </div>
+                </div>
+            </div>
             <div class="hero-content">
                 <h1>Engr. Jorge R. Rojas III</h1>
                 <div class="title-line">
@@ -2562,18 +2580,6 @@
                         </svg>
                         <span class="label">Currently in:</span>
                         <span id="domain-text">Hardware</span><span class="cursor"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hero Image with PCB rings -->
-            <div class="hero-image-wrapper">
-                <div class="hero-ring r1"><span class="dot"></span></div>
-                <div class="hero-ring r2"><span class="dot d2"></span></div>
-                <div class="hero-image-circular clickable-image" data-lightbox-title="Graduation portrait — Jorge R. Rojas III" tabindex="0" role="button">
-                    <div class="frame">
-                        <span class="scanline"></span>
-                        <img src="img/graduation.png" alt="Jorge R. Rojas III graduation portrait" />
                     </div>
                 </div>
             </div>
@@ -2725,7 +2731,7 @@
                     </div>
                     <div class="card-body">
                         <h4>Arduino Music Box</h4>
-                        <p>Logic design and implementation of a programmable music box. Presented at Arduino Day 2024 (iAcademy Makati).</p>
+                        <p>Logic design and implementation of a programmable music box using Arduino, SD card reader, RFID, and MP3 module. Built as a personal gift for my girlfriend during my sophomore year, it was later presented at Arduino Day 2024 (iAcademy Makati).</p>
                         <div class="tech-tags">
                             <span>Arduino</span><span>C++</span><span>Embedded</span>
                         </div>
@@ -2757,7 +2763,7 @@
                     </div>
                     <div class="card-body">
                         <h4>packetHACKS 2024</h4>
-                        <p>IoT Hackathon finalist. Built an innovative medical sensors IoT solution with real-time data processing and embedded integration.</p>
+                        <p>IoT Hackathon finalist. Collaborated with friends from industrial tech and science to build a medical IoT solution with temperature, heart rate, and SpO₂ sensors. We also explored non-invasive blood pressure extraction. The real-time Django‑based doctor/patient dashboard helped us qualify for finals held at The Podium Hall, Ortigas Center.</p>
                         <div class="tech-tags">
                             <span>IoT</span><span>ESP32</span><span>Embedded</span>
                         </div>
@@ -2788,7 +2794,7 @@
                     </div>
                     <div class="card-body">
                         <h4>IoT Attendance System</h4>
-                        <p>Fingerprint biometrics and web platform for timestamped employee logging. Built during internship at Erovoutika Robotics.</p>
+                        <p>Fingerprint biometrics and Django web platform for timestamped employee logging. Built during internship at Erovoutika Robotics, featuring a TFT touchscreen display and real‑time logging.</p>
                         <div class="tech-tags">
                             <span>ESP32</span><span>Fingerprint</span><span>Web</span>
                         </div>
@@ -2845,7 +2851,7 @@
                     <h3>National Programming Champion</h3>
                     <div class="sub">IECEP · 2023 &amp; 2024</div>
                     <p>
-                        Back-to-back champion of the IECEP National Programming Competition. Demonstrated competitive programming and algorithmic problem-solving at the highest level.
+                        Back-to-back champion of the IECEP National Programming Competition. As team captain, I managed training sessions with my juniors, guiding them under our coach's supervision. We demonstrated strong competitive programming and algorithmic problem-solving, securing the championship both years.
                     </p>
                     <div style="margin-top:1rem; display:flex; gap:0.6rem; flex-wrap:wrap;">
                         <span style="background:var(--bg-inset); padding:4px 14px; border-radius:20px; font-size:0.7rem; border:1px solid var(--border); font-family:var(--font-mono); color:var(--text-muted);">2x National Champion</span>
@@ -2873,7 +2879,7 @@
                         <svg viewBox="0 0 24 24"><polyline points="6 6 2 12 6 18"/><polyline points="18 6 22 12 18 18"/><line x1="14" y1="6" x2="10" y2="18"/></svg>
                     </span>
                     <h4>Algolympics 2022 Finalist</h4>
-                    <p>Competitive programming finalist</p>
+                    <p>Competitive programming finalist hosted by UP ACM</p>
                 </div>
                 <div class="achievement-card reveal-item delay-4">
                     <span class="icon-svg">
@@ -2924,13 +2930,16 @@
                         My work bridges hardware, software, and AI — from designing embedded systems to building full-stack web applications and evaluating LLM models.
                     </p>
                     <p>
-                        I thrive at the intersection of disciplines. Whether it's developing a medical AI agent (THERAPOD), automating an IoT attendance system, or speaking at Arduino Day about music box logic, I enjoy solving problems that require both depth and breadth.
+                        I thrive at the intersection of disciplines. Whether it's developing a therapy AI agent (THERAPOD), automating an IoT attendance system, or speaking at Arduino Day about music box logic, I enjoy solving problems that require both depth and breadth.
                     </p>
                     <p>
                         Outside of engineering, I mentor, speak at tech events, and lead technical communities as former CTO of Google Developer Student Clubs - TUP Manila. I believe that the best innovations happen when different fields collide — and I've built my career around that philosophy.
                     </p>
                     <p>
                         From competitive programming to embedded systems, from AI evaluation to circuit design, I approach every project with curiosity and a commitment to quality. I'm always looking for the next challenge that pushes me to learn, grow, and build something meaningful.
+                    </p>
+                    <p>
+                        I'm always open to any ideas that will improve me as an engineer, as I am in the crucial stage of my professional life — foundation and career building.
                     </p>
                 </div>
             </div>
@@ -3193,9 +3202,9 @@
         // Force animations on mobile if reduce-motion is not enabled
         if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             document.querySelectorAll('.hero-ring, .hero-image-circular::after, .hero-image-circular .scanline').forEach(
-            el => {
-                el.style.willChange = 'transform';
-            });
+                el => {
+                    el.style.willChange = 'transform';
+                });
         }
 
         console.log('Portfolio ready — animations active on all devices (unless reduce-motion is enabled).');
